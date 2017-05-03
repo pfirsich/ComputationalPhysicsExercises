@@ -325,8 +325,102 @@ D=B\cdot A=\begin{pmatrix}18.5909 & 0.4196 & -15.6203 & -3.8718 & 27.5784 & -20.
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Section*
+Task 2
+\end_layout
 
+\begin_layout Standard
+In this task we write a function that evaluates and then plot the first
+ 5 Chebychev polynomials of the first kind.
+ They are the solution to the second order ordinary differential equations:
+\begin_inset Formula 
+\[
+(1-x^{2})y''-xy'+n^{2}y=0
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+(1-x^{2})y''-3xy'+n(n+2)y=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+They are orthogonal and have properties that lend themselves to being used
+ for interpolation.
+ 
+\end_layout
+
+\begin_layout Standard
+For evaluating the polynomials in this task, I chose the recursion on the
+ work sheet for ease of implementation, though a more numerically stable
+ and more efficient algorithm, the Clenshaw algorithm would be a better
+ alternative.
+\end_layout
+
+\begin_layout Standard
+A plot of the first 5 Chebychev polynomials can be found in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cheby"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename task2.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cheby"
+
+\end_inset
+
+The first 5 Chebychev polynomials of the first kind
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Task 3
 \end_layout
 
 \end_body

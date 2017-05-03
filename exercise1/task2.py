@@ -8,7 +8,7 @@ def cheby(x, N):
 	for n in range(2,N+1):
 		ret[n] = 2*x*ret[n-1] - ret[n-2]
 	return ret
-		
+
 x = np.linspace(-1, 1, 100)
 T = cheby(x, 4)
 for i in range(len(T)):
@@ -17,4 +17,5 @@ plt.legend()
 plt.grid(True)
 plt.xlabel("x")
 plt.ylabel("T_n(x)")
-plt.show()
+plt.ylim(-1.0, 1.05)
+plt.savefig("task2.pdf")
