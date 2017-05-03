@@ -2,10 +2,12 @@ import numpy as np
 
 # Sorry for not commenting these properly
 def np_mat2tex(m):
-    return " \\\\ \n".join([" & ".join("{:.4f}".format(elem) for elem in row) for row in m.tolist()])
+    return " \\\\ \n".join(" & ".join("{:.4f}".format(elem)
+        for elem in row) for row in m.tolist())
 
 def np_vec2tex(m, delim=" \\\\ "):
-    return delim.join("{:.4f}".format(elem) for elem in m.tolist())
+    return delim.join("{:.4f}".format(elem)
+        for elem in m.tolist())
 
 # 1.
 # 309231

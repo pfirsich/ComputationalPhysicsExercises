@@ -168,8 +168,8 @@ The vectors containing the largest value for each column
 \begin_inset Formula $c$
 \end_inset
 
- a column-vector will be determined using the extra argument of numpy's
- 
+ a column-vector containing the largest value for each row will be determined
+ using the extra argument of numpy's 
 \begin_inset Formula $max$
 \end_inset
 
@@ -233,7 +233,7 @@ Which is above what would have been expected, since the expected value of
 \end_inset
 
  is 
-\begin_inset Formula $6/7.$
+\begin_inset Formula $\frac{N}{N+1}.$
 \end_inset
 
  For a proof, see the <REF>.
@@ -247,7 +247,7 @@ Which is above what would have been expected, since the expected value of
 
 .
  We would then expect a scalar product of 
-\begin_inset Formula $r\cdot c\approx m^{2}*6\approx76.53$
+\begin_inset Formula $<r\cdot c>=6m^{2}\approx76.53$
 \end_inset
 
 .
@@ -421,6 +421,546 @@ The first 5 Chebychev polynomials of the first kind
 
 \begin_layout Section*
 Task 3
+\end_layout
+
+\begin_layout Standard
+When incrementing an unsigned 8-bit integer 300 times, I noticed the value
+ of the variable starting over after 255 at 0.
+ This is known as an integer overflow and is a result of the finite representati
+on of numbers in a machine.
+ Formally after incrementing 255, which in binary is represented as 11111111
+ the result is 100000000, which has no bits not equal to zero that fit into
+ the 8-bit variable, which will result in the variable starting over at
+ 0.
+ The first bit (1), being a carry over into the least significant bit of
+ a more significant word, is called the carry bit and can, if handled in
+ a programming language with adequate access, be queried from the CPU as
+ the 
+\begin_inset Quotes eld
+\end_inset
+
+carry flag
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Naturally this can occur even for bigger (any) word sizes, such as the
+ 64-Bit integer on now commonly used 64-Bit x86 machines.
+ If dealing with a signed variable, the overflow will also result in a sign
+ change.
+ 
+\end_layout
+
+\begin_layout Standard
+It should be noted that in Python this phenomenon can usually not be observed
+ since regular Python variables have arbitrary integer precision and grow
+ as needed internally.
+ For this exercise the workaround was to use a numpy array, which wrap C-style
+ arrays with C datatypes, containing only one element.
+\end_layout
+
+\begin_layout Section*
+Appendix
+\end_layout
+
+\begin_layout Subsection*
+Task 1 program listing
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# Sorry for not commenting these properly
+\end_layout
+
+\begin_layout Plain Layout
+
+def np_mat2tex(m):
+\end_layout
+
+\begin_layout Plain Layout
+
+    return " 
+\backslash
+
+\backslash
+
+\backslash
+
+\backslash
+ 
+\backslash
+n".join(" & ".join("{:.4f}".format(elem)
+\end_layout
+
+\begin_layout Plain Layout
+
+        for elem in row) for row in m.tolist())
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def np_vec2tex(m, delim=" 
+\backslash
+
+\backslash
+
+\backslash
+
+\backslash
+ "):
+\end_layout
+
+\begin_layout Plain Layout
+
+    return delim.join("{:.4f}".format(elem)
+\end_layout
+
+\begin_layout Plain Layout
+
+        for elem in m.tolist())
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# 1.
+\end_layout
+
+\begin_layout Plain Layout
+
+# 309231
+\end_layout
+
+\begin_layout Plain Layout
+
+np.random.seed(9231)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# Rescale random values from [0,1]
+\end_layout
+
+\begin_layout Plain Layout
+
+A = np.random.rand(6,6) * 10.0 - 5.0
+\end_layout
+
+\begin_layout Plain Layout
+
+print("A = ", np_mat2tex(A), "
+\backslash
+n")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# 2.
+\end_layout
+
+\begin_layout Plain Layout
+
+max_value = A.max()
+\end_layout
+
+\begin_layout Plain Layout
+
+max_index = np.where(A == max_value)
+\end_layout
+
+\begin_layout Plain Layout
+
+print(max_index, max_value, "
+\backslash
+n")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# 3.
+\end_layout
+
+\begin_layout Plain Layout
+
+row_max = A.max(axis=0)
+\end_layout
+
+\begin_layout Plain Layout
+
+col_max = A.max(axis=1)
+\end_layout
+
+\begin_layout Plain Layout
+
+print("r = ", np_vec2tex(row_max, " & "))
+\end_layout
+
+\begin_layout Plain Layout
+
+print("c = ", np_vec2tex(col_max), "
+\backslash
+n")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# I hope row_max * col_max is fine (instead of the other way round)
+\end_layout
+
+\begin_layout Plain Layout
+
+print(np.dot(row_max, col_max))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# 4.
+\end_layout
+
+\begin_layout Plain Layout
+
+B = np.random.rand(6,6) * 10.0 - 5.0
+\end_layout
+
+\begin_layout Plain Layout
+
+C = np.dot(A, B)
+\end_layout
+
+\begin_layout Plain Layout
+
+D = np.dot(B, A)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+print("B = ", np_mat2tex(B))
+\end_layout
+
+\begin_layout Plain Layout
+
+print("C = ", np_mat2tex(C))
+\end_layout
+
+\begin_layout Plain Layout
+
+print("D = ", np_mat2tex(D))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Task 2 program listing
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def cheby(x, N):
+\end_layout
+
+\begin_layout Plain Layout
+
+	ret = np.zeros((N+1, len(x)))
+\end_layout
+
+\begin_layout Plain Layout
+
+	ret[0] = np.ones(len(x))
+\end_layout
+
+\begin_layout Plain Layout
+
+	ret[1] = np.copy(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+	for n in range(2,N+1):
+\end_layout
+
+\begin_layout Plain Layout
+
+		ret[n] = 2*x*ret[n-1] - ret[n-2]
+\end_layout
+
+\begin_layout Plain Layout
+
+	return ret
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+x = np.linspace(-1, 1, 100)
+\end_layout
+
+\begin_layout Plain Layout
+
+T = cheby(x, 4)
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(len(T)):
+\end_layout
+
+\begin_layout Plain Layout
+
+	plt.plot(x, T[i], label="T_" + str(i))
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.grid(True)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.xlabel("x")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylabel("T_n(x)")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylim(-1.0, 1.05)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig("task2.pdf")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Task 3 program listing
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+i = np.arange(1, dtype=np.uint8)
+\end_layout
+
+\begin_layout Plain Layout
+
+print(i[0])
+\end_layout
+
+\begin_layout Plain Layout
+
+for j in range(0, 300):
+\end_layout
+
+\begin_layout Plain Layout
+
+	i[0] = i[0] + 1
+\end_layout
+
+\begin_layout Plain Layout
+
+	print(i[0])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Expectation value of the maximum of 
+\begin_inset Formula $N$
+\end_inset
+
+ samples of a uniform distribution in 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $X_{i}\in[0,1]$
+\end_inset
+
+ be 
+\begin_inset Formula $N\in\mathbb{N}$
+\end_inset
+
+ independent uniformly distributed random variables.
+ Let 
+\begin_inset Formula $M=max(X_{1,},X_{2},...,X_{N})$
+\end_inset
+
+ be the maximum in question.
+ The probability of 
+\begin_inset Formula $M$
+\end_inset
+
+ being smaller than some 
+\begin_inset Formula $x\in\mathbb{R}$
+\end_inset
+
+ is: 
+\begin_inset Formula 
+\[
+P(M\le x)=P(X_{1}\le x,X_{2}\le x,...,X_{N}\le x)=P(X_{1}\le x)\cdot P(X_{2}\le x)\cdot...\cdot P(X_{N}\le x)=x^{N}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since all random variables are independent the factorization in the second
+ step is allowed.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $P(M\le x)$
+\end_inset
+
+ being the definition for the cumulative distribution function, we can obtain
+ the probability distribution for 
+\begin_inset Formula $M$
+\end_inset
+
+ by differentiation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\rho_{M}(x)=N\cdot x^{N-1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And it follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E[M]=\int_{0}^{1}x\cdot N\cdot x^{N-1}dx=\frac{N}{N+1}
+\]
+
+\end_inset
+
+
 \end_layout
 
 \end_body
