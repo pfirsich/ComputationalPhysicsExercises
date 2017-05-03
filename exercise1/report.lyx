@@ -1,0 +1,333 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Computational Physics - Exercise 1
+\end_layout
+
+\begin_layout Author
+Joel Schumacher, 309231, joel.schumacher@rwth-aachen.de
+\end_layout
+
+\begin_layout Section*
+Task 1
+\end_layout
+
+\begin_layout Subsection*
+1.
+\end_layout
+
+\begin_layout Standard
+With my matricle number being 
+\begin_inset Formula $309231$
+\end_inset
+
+, I chose the seed of the Mersenne Twister random number generator used
+ by the numpy module as 
+\begin_inset Formula $9231$
+\end_inset
+
+.
+ The convenience function 
+\begin_inset Formula $np.random.rand$
+\end_inset
+
+ will return uniform random samples in the interval 
+\begin_inset Formula $[0,1)$
+\end_inset
+
+, so that I have to rescale into 
+\begin_inset Formula $[-5.0,5.0)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The resulting matrix 
+\begin_inset Formula $A$
+\end_inset
+
+ is then:
+\begin_inset Formula 
+\[
+A=\begin{pmatrix}2.2029 & 4.9743 & -2.0779 & 3.1163 & 1.2233 & -2.0957\\
+-4.1435 & 1.4772 & 0.3867 & 2.7847 & -0.1969 & -3.7180\\
+4.5648 & -4.4702 & -0.8552 & 3.4828 & 0.4080 & -3.1573\\
+0.1776 & -4.0575 & -1.2090 & 2.4640 & 4.7895 & -3.2285\\
+4.8563 & 2.5141 & 1.2010 & -1.8702 & 1.9321 & 2.6607\\
+-2.6221 & 1.5498 & -0.3413 & 4.3567 & -1.2784 & 2.6796
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+2.
+\end_layout
+
+\begin_layout Standard
+The largest element of the matrix was then found at the index 
+\begin_inset Formula $0,1$
+\end_inset
+
+.
+ In regular mathematical notation this corresponds to the element 
+\begin_inset Formula $A_{12}$
+\end_inset
+
+, which is equal to 
+\begin_inset Formula $A_{12}=4.9743$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+3.
+\end_layout
+
+\begin_layout Standard
+The vectors containing the largest value for each column 
+\begin_inset Formula $r$
+\end_inset
+
+, a row-vector and 
+\begin_inset Formula $c$
+\end_inset
+
+ a column-vector will be determined using the extra argument of numpy's
+ 
+\begin_inset Formula $max$
+\end_inset
+
+ function.
+ The results are:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+r=\begin{pmatrix}4.8563 & 4.9743 & 1.2010 & 4.3567 & 4.7895 & 2.6796\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+c=\begin{pmatrix}4.9743\\
+2.7847\\
+4.5648\\
+4.7895\\
+4.8563\\
+4.3567
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The product of these vectors, assuming we are not supposed to calculate
+ 
+\begin_inset Formula $c\cdot r$
+\end_inset
+
+ is then 
+\begin_inset Formula 
+\[
+r\cdot c\approx99.29
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Which is above what would have been expected, since the expected value of
+ the maximum of 
+\begin_inset Formula $N$
+\end_inset
+
+ samples of a uniform distribution between 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+ is 
+\begin_inset Formula $6/7.$
+\end_inset
+
+ For a proof, see the <REF>.
+ The rescaled expected value for the maximum of 
+\begin_inset Formula $6$
+\end_inset
+
+ independent samples is then 
+\begin_inset Formula $m=\frac{6}{7}*10-5\approx3.57$
+\end_inset
+
+.
+ We would then expect a scalar product of 
+\begin_inset Formula $r\cdot c\approx m^{2}*6\approx76.53$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+4.
+\end_layout
+
+\begin_layout Standard
+Our second random matrix is:
+\begin_inset Formula 
+\[
+B=\begin{pmatrix}4.8686 & -3.3602 & -1.8808 & 4.2009 & -1.6982 & -3.8247\\
+2.5127 & -4.7676 & -2.5390 & -2.4462 & -0.7683 & 3.8182\\
+-0.5627 & 1.4668 & 1.6576 & -1.4767 & -2.8466 & -4.3560\\
+4.2442 & 1.5349 & -2.6651 & -4.3131 & -4.8585 & -2.9110\\
+-1.6806 & 3.0978 & -1.4647 & -3.4098 & -2.9560 & 1.5230\\
+-3.3280 & -2.2861 & 3.8720 & 0.8065 & 1.3259 & -2.3052
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Using the function 
+\begin_inset Formula $np.dot$
+\end_inset
+
+ we can calculate the matrix products 
+\begin_inset Formula $C=A\cdot B$
+\end_inset
+
+ and 
+\begin_inset Formula $D=B\cdot A$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+C=A\cdot B=\begin{pmatrix}42.5379 & -20.8025 & -38.4292 & -19.1478 & -23.1825 & 17.2414\\
+7.8440 & 19.6115 & -16.8457 & -35.9287 & -13.0759 & 19.9684\\
+36.0774 & 18.5460 & -20.7583 & 12.4152 & -24.1965 & -33.0410\\
+4.5027 & 42.9743 & -18.1186 & -17.1054 & -24.1526 & -3.3417\\
+9.2449 & -29.5105 & -1.0696 & 16.1004 & -6.6947 & -11.9526\\
+3.0418 & -2.4778 & 1.0678 & -26.5728 & -9.6015 & -3.3734
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+D=B\cdot A=\begin{pmatrix}18.5909 & 0.4196 & -15.6203 & -3.8718 & 27.5784 & -20.1008\\
+-0.4773 & 30.7177 & -4.1614 & -2.2452 & -15.1054 & 36.5615\\
+-2.4147 & -15.9583 & 0.1718 & -9.1885 & -7.3050 & -23.9865\\
+-25.9029 & 36.0671 & -5.5736 & -6.0057 & -22.5206 & -12.9891\\
+-42.1783 & 11.5273 & 5.9952 & 2.0493 & -27.2530 & 3.8533\\
+32.4428 & -40.7519 & 4.1238 & -13.7866 & 7.3300 & -2.0041
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_body
+\end_document
