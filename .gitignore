@@ -1,2 +1,4 @@
 *.lyx#
 *.lyx~
+*.synctex.gz
+*.tex

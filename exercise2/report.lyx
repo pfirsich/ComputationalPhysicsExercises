@@ -1,0 +1,1167 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Computational Physics - Exercise 2
+\end_layout
+
+\begin_layout Author
+Joel Schumacher, 309231, joel.schumacher@rwth-aachen.de
+\end_layout
+
+\begin_layout Standard
+Task 1
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Plot <x^2> - <x>^2 as a function of N - How does the result compare to what
+ you expect from the analytical result?
+\end_layout
+
+\begin_layout Plain Layout
+What is the required length of the 1D lattice if each particle makes N jumps,
+ starting at the origin?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Introduction
+\end_layout
+
+\begin_layout Standard
+In this task I consider the behaviour of a 1 dimensional symmetric random
+ walk with respect to it's diffusion-like properties.
+ I want to find the functional relationship of the variance 
+\begin_inset Formula $v=\left\langle x^{2}\right\rangle -\left\langle x\right\rangle ^{2}$
+\end_inset
+
+with respect to the number of steps of the random walk.
+\end_layout
+
+\begin_layout Subsection*
+Simulation model and method
+\end_layout
+
+\begin_layout Standard
+The random walk will be modelled by a position stored for each particle
+ that is updated in every timestep by either being incremented or decremented
+ randomly with a percentage of 
+\begin_inset Formula $50\%$
+\end_inset
+
+ each.
+ The initial position will be 
+\begin_inset Formula $0$
+\end_inset
+
+ for each particle.
+ With 
+\begin_inset Formula $N_{jumps}$
+\end_inset
+
+being the total number of jumps simulated the 1D lattice has to have dimensions
+ of 
+\begin_inset Formula $2\cdot N_{jumps}\cdot\Delta x$
+\end_inset
+
+, where 
+\begin_inset Formula $\Delta x$
+\end_inset
+
+ is the distance between each lattice site.
+ Each final position may range from 
+\begin_inset Formula $-N_{jumps}$
+\end_inset
+
+ to 
+\begin_inset Formula $N_{jumps}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+In figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:walk_var"
+
+\end_inset
+
+ we see the result of plotting the variance 
+\begin_inset Formula $v=\left\langle x^{2}\right\rangle -\left\langle x\right\rangle ^{2}$
+\end_inset
+
+ over the number of jumps.
+ A linear relationship of the form 
+\begin_inset Formula $v=N$
+\end_inset
+
+ can clearly be observed.
+ An additional plot showing the histograms of particle positions after a
+ different number steps can be seen in figure REF.
+ As expected from the theory discussed in the lecture, all distributions
+ have a gaussian shape and in compliance with the first graph we observe
+ an increased width of each distribution for higher numbers of jumps 
+\begin_inset Formula $N$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename walk_var.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The variance of the positions 
+\begin_inset Formula $v$
+\end_inset
+
+ with respect to the number of jumps 
+\begin_inset Formula $N$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:walk_var"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename walk_hist.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Histograms of the particle positions for different numbers of jumps
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Discussion
+\end_layout
+
+\begin_layout Standard
+The linear relationship exhibited in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:walk_var"
+
+\end_inset
+
+ is in accordance with our expectation from the analytical considerations
+ in that the gaussian distribution for the position for each particle has
+ a mean of 
+\begin_inset Formula $\left\langle x\right\rangle =0$
+\end_inset
+
+ and the root mean square was determined as 
+\begin_inset Formula $\sqrt{\left\langle x^{2}\right\rangle }=\sqrt{N}\Delta x\Leftrightarrow\left\langle x^{2}\right\rangle =N\cdot\Delta x^{2}=N$
+\end_inset
+
+ so that we get for our variance 
+\begin_inset Formula $v$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+v=\left\langle x^{2}\right\rangle -\left\langle x\right\rangle ^{2}=N
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which is exactly what is visible in the plot.
+ This behaviour corresponds to the aforementioned 
+\begin_inset Quotes eld
+\end_inset
+
+diffusion
+\begin_inset Quotes erd
+\end_inset
+
+ in that the particles' spatial uncertainty rises.
+\end_layout
+
+\begin_layout Section*
+Task 2
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+* Write a program to simulate the single-photon EPRB experiment by means
+ of the event-based simulation approach (see sample program)
+\end_layout
+
+\begin_layout Plain Layout
+* Plot 
+\begin_inset Formula $E_{12}(a,b)$
+\end_inset
+
+ and 
+\begin_inset Formula $E_{1}(a,b)E_{2}(a,b)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+* What do these results mean?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Introduction
+\end_layout
+
+\begin_layout Subsection*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename eprb_plot.pdf
+	scale 32
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:ex2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+* Introduction: describe briefly the problem you are modeling and simulating
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation model and method: describe briefly the model and simulation
+ method in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation results: show figures (with figure captions!) depicting the
+ simulation results.
+ Give a brief description of the results in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Discussion: Summarize your findings
+\end_layout
+
+\begin_layout Plain Layout
+* Appendix: Include the listing of the program
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Appendix
+\end_layout
+
+\begin_layout Subsection*
+Program for Task 1
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+N_PART = 10000
+\end_layout
+
+\begin_layout Plain Layout
+
+N_JUMPS = 1000
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+part_pos = np.zeros(N_PART, dtype=np.int32)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# Matricle number 309231
+\end_layout
+
+\begin_layout Plain Layout
+
+np.random.seed(9231)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.rc('text', usetex=True)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var = np.zeros(N_JUMPS)
+\end_layout
+
+\begin_layout Plain Layout
+
+for i_jump in range(N_JUMPS):
+\end_layout
+
+\begin_layout Plain Layout
+
+    for i_part in range(N_PART):
+\end_layout
+
+\begin_layout Plain Layout
+
+        if np.random.random() < 0.5:
+\end_layout
+
+\begin_layout Plain Layout
+
+            part_pos[i_part] += 1
+\end_layout
+
+\begin_layout Plain Layout
+
+        else:
+\end_layout
+
+\begin_layout Plain Layout
+
+            part_pos[i_part] -= 1
+\end_layout
+
+\begin_layout Plain Layout
+
+    var[i_jump] = np.var(part_pos)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (i_jump+1) % 250 == 0:
+\end_layout
+
+\begin_layout Plain Layout
+
+        plt.hist(part_pos, bins=50, alpha=0.5,
+\end_layout
+
+\begin_layout Plain Layout
+
+            label="{} jumps".format(i_jump+1),
+\end_layout
+
+\begin_layout Plain Layout
+
+            histtype="stepfilled", range=(-150, 150))#range=(-N_JUMPS,N_JUMPS))
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.xlabel("Position")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylabel("Number of particles")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig("walk_hist.pdf")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(var)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.xlabel("Number of steps $N$")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylabel("Variance of position $<x^2> - <x>^2$")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig("walk_var.pdf")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Program for Task 2
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,breaklines=true,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import math
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def analyzer(c, s, cHWP, sHWP, T0):
+\end_layout
+
+\begin_layout Plain Layout
+
+    # modulator rotates polarization
+\end_layout
+
+\begin_layout Plain Layout
+
+    c2 =  cHWP*c + sHWP*s
+\end_layout
+
+\begin_layout Plain Layout
+
+    s2 = -sHWP*c + cHWP*s
+\end_layout
+
+\begin_layout Plain Layout
+
+    x = c2*c2 - s2*s2 # cos(2(x-a))
+\end_layout
+
+\begin_layout Plain Layout
+
+    y = 2*c2*s2 # sin(2(x-1))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    # Malus law
+\end_layout
+
+\begin_layout Plain Layout
+
+    r0 = np.random.random()
+\end_layout
+
+\begin_layout Plain Layout
+
+    if x > r0*2.0-1.0:
+\end_layout
+
+\begin_layout Plain Layout
+
+        j = 0 # +1 event
+\end_layout
+
+\begin_layout Plain Layout
+
+    else:
+\end_layout
+
+\begin_layout Plain Layout
+
+        j = 1 # -1 event
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    # delay time: T0 * sin(2(theta1-x))**4
+\end_layout
+
+\begin_layout Plain Layout
+
+    l = y*y*y*y*T0*np.random.random()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    return j, l
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+nsteps = 32
+\end_layout
+
+\begin_layout Plain Layout
+
+nsamples = 200000
+\end_layout
+
+\begin_layout Plain Layout
+
+nsamples = 200000
+\end_layout
+
+\begin_layout Plain Layout
+
+HWP2 = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+T0 = 1000
+\end_layout
+
+\begin_layout Plain Layout
+
+W = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+cHWP2 = math.cos(HWP2/180*math.pi)
+\end_layout
+
+\begin_layout Plain Layout
+
+sHWP2 = math.sin(HWP2/180*math.pi)
+\end_layout
+
+\begin_layout Plain Layout
+
+count = np.zeros((2, 2, 2, nsteps))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for ipsi0 in range(nsteps):
+\end_layout
+
+\begin_layout Plain Layout
+
+    # loop over all different settings of electro-optic modulator
+\end_layout
+
+\begin_layout Plain Layout
+
+    cHWP1 = math.cos(ipsi0*2.0*math.pi/nsteps)
+\end_layout
+
+\begin_layout Plain Layout
+
+    sHWP1 = math.sin(ipsi0*2.0*math.pi/nsteps)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    for i in range(nsamples):
+\end_layout
+
+\begin_layout Plain Layout
+
+        # random polarization for one photon
+\end_layout
+
+\begin_layout Plain Layout
+
+        angle = np.random.random() * 2.0*math.pi
+\end_layout
+
+\begin_layout Plain Layout
+
+        c1 = math.cos(angle)
+\end_layout
+
+\begin_layout Plain Layout
+
+        s1 = math.sin(angle)
+\end_layout
+
+\begin_layout Plain Layout
+
+        # the other photon is orthogonal
+\end_layout
+
+\begin_layout Plain Layout
+
+        c2 = -s1
+\end_layout
+
+\begin_layout Plain Layout
+
+        s2 = c1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        j1, t1 = analyzer(c1, s1, cHWP1, sHWP1, T0)
+\end_layout
+
+\begin_layout Plain Layout
+
+        j2, t2 = analyzer(c2, s2, cHWP2, sHWP2, T0)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        count[j1, j2, 0, ipsi0] += 1
+\end_layout
+
+\begin_layout Plain Layout
+
+        if abs(t1-t2) < W:
+\end_layout
+
+\begin_layout Plain Layout
+
+            count[j1, j2, 1, ipsi0] += 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# data analysis
+\end_layout
+
+\begin_layout Plain Layout
+
+tot = np.zeros((2, nsteps))
+\end_layout
+
+\begin_layout Plain Layout
+
+E1 = np.zeros((2, nsteps))
+\end_layout
+
+\begin_layout Plain Layout
+
+E2 = np.zeros((2, nsteps))
+\end_layout
+
+\begin_layout Plain Layout
+
+E12 = np.zeros((2, nsteps))
+\end_layout
+
+\begin_layout Plain Layout
+
+S = np.zeros((2, nsteps))
+\end_layout
+
+\begin_layout Plain Layout
+
+r0 = np.zeros(nsteps)
+\end_layout
+
+\begin_layout Plain Layout
+
+phi = np.zeros(nsteps)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for j in range(nsteps):
+\end_layout
+
+\begin_layout Plain Layout
+
+    phi[j] = j * 360.0 / nsteps
+\end_layout
+
+\begin_layout Plain Layout
+
+    r0[j] = -math.cos(2.0*j*2.0*math.pi/nsteps)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    for i in range(2): # temporally correlated or not
+\end_layout
+
+\begin_layout Plain Layout
+
+        tot[i,j] = np.sum(count[:,:,i,j])
+\end_layout
+
+\begin_layout Plain Layout
+
+        E12[i,j] = count[0,0,i,j] + count[1,1,i,j] - count[1,0,i,j] - count[0,1,
+i,j]
+\end_layout
+
+\begin_layout Plain Layout
+
+        E1[i,j] = count[0,0,i,j] + count[0,1,i,j] - count[1,1,i,j] - count[1,0,i
+,j]
+\end_layout
+
+\begin_layout Plain Layout
+
+        E2[i,j] = count[0,0,i,j] + count[1,0,i,j] - count[1,1,i,j] - count[0,1,i
+,j]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        if tot[i,j] > 0:
+\end_layout
+
+\begin_layout Plain Layout
+
+            E12[i,j] = E12[i,j] / tot[i,j]
+\end_layout
+
+\begin_layout Plain Layout
+
+            E1[i,j] = E1[i,j] / tot[i,j]
+\end_layout
+
+\begin_layout Plain Layout
+
+            E2[i,j] = E2[i,j] / tot[i,j]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        S[i,j] = 3.0 * E12[i,j] - E12[i, j*3 % nsteps]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# plot
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.rc('text', usetex=True)
+\end_layout
+
+\begin_layout Plain Layout
+
+f, axarr = plt.subplots(1, 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[0].plot(phi, E12[0,:], label="no time coincidence", linestyle="--",
+ marker="o", color="r")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[0].plot(phi, E12[1,:], label="time coincidence", linestyle="-", marker="o",
+ color="k")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[0].axhline(0, linestyle="--", color="k")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[0].set_xlabel(r"$
+\backslash
+phi$ (degrees)")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[0].set_ylabel(r"$<S_1 S_2>$")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[0].set_ylim(-1, 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[0].legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[1].plot(phi, E1[0,:]*E2[0,:], label="no time coincidence", linestyle="--",
+ marker="o", color="r")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[1].plot(phi, E1[1,:]*E2[1,:], label="time coincidence", linestyle="-",
+ marker="o", color="k")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[1].set_xlabel(r"$
+\backslash
+phi$ (degrees)")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[1].set_ylabel(r"$<S_1><S_2>$")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[1].set_ylim(-1, 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[1].legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig("ex2.pdf")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
