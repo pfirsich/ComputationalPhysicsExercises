@@ -24,7 +24,6 @@ def analyzer(c, s, cHWP, sHWP, T0):
 
 nsteps = 32
 nsamples = 200000
-#nsamples = 20000
 HWP2 = 0
 T0 = 1000
 W = 1
@@ -87,15 +86,15 @@ f, axarr = plt.subplots(1, 2, figsize=(15,10))
 axarr[0].plot(phi, E12[0,:], label="no time coincidence", linestyle="--", marker="o", color="r")
 axarr[0].plot(phi, E12[1,:], label="time coincidence", linestyle="-", marker="o", color="k")
 axarr[0].axhline(0, linestyle="--", color="k")
-axarr[0].set_xlabel(r"$\phi$ (degrees)")
-axarr[0].set_ylabel(r"$<S_1 S_2>$")
+axarr[0].set_xlabel(r"$\varphi$ (degrees)")
+axarr[0].set_ylabel(r"$E_{12}(a,b)$")
 axarr[0].set_ylim(-1, 1)
 axarr[0].legend()
 
 axarr[1].plot(phi, E1[0,:]*E2[0,:], label="no time coincidence", linestyle="--", marker="o", color="r")
 axarr[1].plot(phi, E1[1,:]*E2[1,:], label="time coincidence", linestyle="-", marker="o", color="k")
-axarr[1].set_xlabel(r"$\phi$ (degrees)")
-axarr[1].set_ylabel(r"$<S_1><S_2>$")
+axarr[1].set_xlabel(r"$\varphi$ (degrees)")
+axarr[1].set_ylabel(r"$E_1(a,b) \cdot E_2(a,b)$")
 axarr[1].set_ylim(-1, 1)
 axarr[1].legend()
 plt.savefig("eprb_plot.pdf")

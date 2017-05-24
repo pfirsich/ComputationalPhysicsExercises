@@ -78,8 +78,11 @@ Computational Physics - Exercise 2
 Joel Schumacher, 309231, joel.schumacher@rwth-aachen.de
 \end_layout
 
-\begin_layout Standard
+\begin_layout Section*
 Task 1
+\end_layout
+
+\begin_layout Standard
 \begin_inset Note Note
 status open
 
@@ -103,13 +106,13 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-In this task I consider the behaviour of a 1 dimensional symmetric random
- walk with respect to it's diffusion-like properties.
- I want to find the functional relationship of the variance 
+In this task the behaviour of a 1 dimensional symmetric random walk is examined
+ with respect to it's diffusion-like properties.
+ The goal is to find the functional relationship between the variance 
 \begin_inset Formula $v=\left\langle x^{2}\right\rangle -\left\langle x\right\rangle ^{2}$
 \end_inset
 
-with respect to the number of steps of the random walk.
+and the number of steps of the random walk.
 \end_layout
 
 \begin_layout Subsection*
@@ -133,7 +136,7 @@ The random walk will be modelled by a position stored for each particle
 \begin_inset Formula $N_{jumps}$
 \end_inset
 
-being the total number of jumps simulated the 1D lattice has to have dimensions
+ being the total number of jumps simulated the 1D lattice has to have dimensions
  of 
 \begin_inset Formula $2\cdot N_{jumps}\cdot\Delta x$
 \end_inset
@@ -166,25 +169,32 @@ reference "fig:walk_var"
 
 \end_inset
 
- we see the result of plotting the variance 
+ the result of plotting the variance 
 \begin_inset Formula $v=\left\langle x^{2}\right\rangle -\left\langle x\right\rangle ^{2}$
 \end_inset
 
- over the number of jumps.
+ over the number of jumps can be seen.
  A linear relationship of the form 
-\begin_inset Formula $v=N$
+\begin_inset Formula $v\approx N$
 \end_inset
 
  can clearly be observed.
  An additional plot showing the histograms of particle positions after a
- different number steps can be seen in figure REF.
- As expected from the theory discussed in the lecture, all distributions
- have a gaussian shape and in compliance with the first graph we observe
- an increased width of each distribution for higher numbers of jumps 
-\begin_inset Formula $N$
+ different number steps can be seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:walk_hist"
+
 \end_inset
 
 .
+ As expected from the theory discussed in the lecture, all distributions
+ have a gaussian shape and in compliance with the first graph an increased
+ width of each distribution for higher numbers of jumps 
+\begin_inset Formula $N$
+\end_inset
+
+ is observed.
 \end_layout
 
 \begin_layout Standard
@@ -262,6 +272,13 @@ status open
 
 \begin_layout Plain Layout
 Histograms of the particle positions for different numbers of jumps
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:walk_hist"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -290,7 +307,7 @@ reference "fig:walk_var"
 
 \end_inset
 
- is in accordance with our expectation from the analytical considerations
+ is in accordance with the expectation from the analytical considerations
  in that the gaussian distribution for the position for each particle has
  a mean of 
 \begin_inset Formula $\left\langle x\right\rangle =0$
@@ -300,7 +317,7 @@ reference "fig:walk_var"
 \begin_inset Formula $\sqrt{\left\langle x^{2}\right\rangle }=\sqrt{N}\Delta x\Leftrightarrow\left\langle x^{2}\right\rangle =N\cdot\Delta x^{2}=N$
 \end_inset
 
- so that we get for our variance 
+ so that it follows for the variance 
 \begin_inset Formula $v$
 \end_inset
 
@@ -369,8 +386,167 @@ status open
 Introduction
 \end_layout
 
+\begin_layout Standard
+In this task a simulated realization of the Einstein–Podolsky–Rosen thought
+ experiment is studied, specifically Bohm's variant of a system of two entangled
+ spins.
+ The EPR thought experiment, often called 
+\begin_inset Quotes eld
+\end_inset
+
+EPR paradoxon
+\begin_inset Quotes erd
+\end_inset
+
+ suggests non-locality or non-realism in quantum mechanical systems.
+\end_layout
+
+\begin_layout Standard
+It consists of an entangled system of two spins, that may be well separated
+ in space-time after being prepared in the entangled state.
+ The orientation of one of the spins is unknown at the moment of measurement
+ and according to the Copenhagen interpretation even indeterminate before
+ measurement, therefore not element of physical reality.
+ When one of the spins is measured information about the other system can
+ be gained due to their entangled preparation, while never having measured
+ that system itself.
+ Local causality is assumed, meaning that the measurement of one may not
+ influence the other system, because doing so instantly would violate relativity.
+ That new gained information is then element of physical reality, but not
+ accessible by the formalism of quantum mechanics when considering only
+ that subsystem of the unmeasured spin.
+ Einstein, Podolsky and Rosen concluded the incompleteness of quantum mechanics
+ and the necessity for hidden variables.
+ These ideas have been invalidated by experiments confirming Bell's theorem
+ - 
+\begin_inset Quotes eld
+\end_inset
+
+No physical theory of hidden variables can ever reproduce all of the predictions
+ of quantum mechanics
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Simulation model and method
+\end_layout
+
+\begin_layout Standard
+In the simulation a pair of photons is considered of which one has a random
+ polarization and the second is chosen orthogonal to the first.
+ The polarization of the first photon is then rotated by a random angle
+ 
+\begin_inset Formula $\varphi$
+\end_inset
+
+ to simulate measuring both photons along a random direction each, Malus's
+ law is applied and their polarization is measured along that axis (
+\begin_inset Formula $+1$
+\end_inset
+
+ or 
+\begin_inset Formula $-1$
+\end_inset
+
+).
+ The event counts of these measurements, referenced as 
+\begin_inset Quotes eld
+\end_inset
+
+count
+\begin_inset Quotes erd
+\end_inset
+
+ in code, 
+\begin_inset Formula $c_{ij}$
+\end_inset
+
+ with 
+\begin_inset Formula $i,j\in\{+,-\}$
+\end_inset
+
+ are then used to determine the expectation values of each individual polarizati
+on/spin 
+\begin_inset Formula $E_{1}(a,b)=\left\langle \Psi|\sigma_{1}\cdot a|\Psi\right\rangle $
+\end_inset
+
+, 
+\begin_inset Formula $E_{2}(a,b)=\left\langle \Psi|\sigma_{2}\cdot b|\Psi\right\rangle $
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+E_{1}(a,b)=\frac{c_{--}+c_{-+}-c_{++}-c_{+-}}{c_{--}+c_{-+}+c_{++}+c_{+-}}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+E_{2}(a,b)=\frac{c_{--}+c_{+-}-c_{++}-c_{-+}}{c_{--}+c_{+-}+c_{++}+c_{-+}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One can also calculate the correlation 
+\begin_inset Formula $E_{12}(a,b)=\left\langle \Psi|\sigma_{1}\cdot a\sigma_{2}\cdot b|\Psi\right\rangle $
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+E_{1}(a,b)=\frac{c_{++}+c_{--}-c_{+-}-c_{-+}}{c_{++}+c_{--}+c_{+-}+c_{-+}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Additionally and optionally a time tag can be assigned to each photon that
+ is determined by considering the retardation effects of the wave plates
+ used to alter the polarization of the photons.
+ To mimic the real experiment only temporally correlated pairs with 
+\begin_inset Formula $\Delta t<W$
+\end_inset
+
+ are used where 
+\begin_inset Formula $W$
+\end_inset
+
+ is the time window to select two photons as a pair.
+ This coincidence criterion is then applied to all events and all non-coinciding
+ pairs are omitted to improve accuracy.
+\end_layout
+
 \begin_layout Subsection*
 Simulation results
+\end_layout
+
+\begin_layout Standard
+The results of this simulation can be seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:ex2"
+
+\end_inset
+
+.
+ The expectation value of the indiviual polarization vanishes for every
+ angle and the expectation value of the correlation follows a sinusodial
+ behaviour.
+ When taking into account time coincidence of the photons, a more pronounced
+ signal for the correlation is observed.
 \end_layout
 
 \begin_layout Standard
@@ -394,6 +570,14 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+Expectation values of each individual polarization (right) and the correlation
+ of the polarizations (left) over the angle difference of the analyzers
+ 
+\begin_inset Formula $\varphi$
+\end_inset
+
+.
+ With time coincidence and without in black and red respectively.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:ex2"
@@ -408,13 +592,60 @@ name "fig:ex2"
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection*
+Discussion
+\end_layout
+
+\begin_layout Standard
+The vanishing of the expectation value of the individual polarizations is
+ in absolute accordance with the expectation, since for a uniformly distributed
+ angle it is equally likely to point 
+\begin_inset Quotes eld
+\end_inset
+
+up
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+down
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The correlation predicted analytically for the quantum experiment is 
+\begin_inset Formula $E_{12}(a,b)=-a\cdot b=\cos(\sphericalangle(a,b))$
+\end_inset
+
+, which is also in accordance with the experiment.
+\end_layout
+
+\begin_layout Standard
+It is therefore possible to simulate a quantum mechanical system without
+ directly incorporating the formalism of quantum mechanics itself and reproduce
+ behaviour that is exhibited in this quantum system.
+ 
+\end_layout
+
+\begin_layout Standard
+It should be noted that the measurements in the simulation are compatible
+ with Einstein's criterion of local causality, because we measure only one
+ photon in the analyzer without then modifying the other photon using the
+ result of that measurement.
+ The EPR paradoxon is then resolved in this simulation, but through the
+ usage of hidden variables.
 \end_layout
 
 \begin_layout Part*
@@ -459,7 +690,7 @@ Program for Task 1
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "language=Python,numbers=left,tabsize=4"
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
 inline false
 status open
 
@@ -652,7 +883,7 @@ Program for Task 2
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "language=Python,numbers=left,breaklines=true,tabsize=4"
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
 inline false
 status open
 
