@@ -1,0 +1,1746 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Computational Physics - Exercise 3
+\end_layout
+
+\begin_layout Author
+Joel Schumacher, 309231, joel.schumacher@rwth-aachen.de
+\end_layout
+
+\begin_layout Section*
+1D Ising model
+\end_layout
+
+\begin_layout Subsection*
+Introduction
+\end_layout
+
+\begin_layout Standard
+The Ising model is a simple and popular theoretical model for solids that
+ exhibits a magnetic phase transition.
+ Without an external magnetic field our Hamiltonian is as follows:
+\begin_inset Formula 
+\[
+H=-J\sum_{\text{neighbours i,j}}S_{i}\cdot S_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $S_{i}$
+\end_inset
+
+ is the a spin operator with two possible eigenvalues.
+ In the case of this simulation the constants are chosen so that 
+\begin_inset Formula $J=1$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{i}$
+\end_inset
+
+ has two possible eigenvalues 
+\begin_inset Formula $+1$
+\end_inset
+
+ and 
+\begin_inset Formula $-1$
+\end_inset
+
+.
+ Also 
+\begin_inset Formula $k_{B}$
+\end_inset
+
+ is set to 
+\begin_inset Formula $k_{B}=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In the specific case of the 1D Ising model the total energy is then:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E=-\sum_{n=1}^{N-1}S_{n}S_{n+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+assuming free boundary conditions and 
+\begin_inset Formula $N$
+\end_inset
+
+ spins in our system.
+\end_layout
+
+\begin_layout Subsection*
+Simulation model
+\end_layout
+
+\begin_layout Standard
+For our simulation the Metropolis Monte Carlo (MMC) method is used.
+ The system of spins is initialized with a random array of 
+\begin_inset Formula $N$
+\end_inset
+
+ values in 
+\begin_inset Formula $\{-1,1\}$
+\end_inset
+
+ representing the spins of the system.
+ Then 
+\begin_inset Formula $N_{wait}=N_{samples}/10$
+\end_inset
+
+ steps of relaxation for the system are performed after which 
+\begin_inset Formula $N_{samples}$
+\end_inset
+
+ regular steps of measurement follow.
+ In each of these steps 
+\begin_inset Formula $N$
+\end_inset
+
+ substeps are performed, which consist of the selection of a (uniform) random
+ spin in the system and the calculation of the total change of energy 
+\begin_inset Formula $\Delta E$
+\end_inset
+
+ of the system if that spin was flipped.
+ If 
+\begin_inset Formula $\Delta E<0,$
+\end_inset
+
+ the flip is applied, if 
+\begin_inset Formula $\Delta E>0$
+\end_inset
+
+ the flip is only applied if 
+\begin_inset Formula $\exp(-\Delta E\cdot\beta)>r$
+\end_inset
+
+, where 
+\begin_inset Formula $r$
+\end_inset
+
+ is a uniform random variable in 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+.
+ This represents a Markov Chain that generates a sequence of states 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ of the system, that follows the probability distribution of the grandcanonical
+ ensemble.
+ Using this sequence the expectation value of 
+\begin_inset Formula $E$
+\end_inset
+
+ and 
+\begin_inset Formula $E^{2}$
+\end_inset
+
+ and in turn 
+\begin_inset Formula $U=\left\langle E\right\rangle $
+\end_inset
+
+ and 
+\begin_inset Formula $C=\beta^{2}\left(\left\langle E^{2}\right\rangle -\left\langle E\right\rangle ^{2}\right)$
+\end_inset
+
+can be calculated through the arithmetic mean:
+\begin_inset Formula 
+\[
+<f>\approx\frac{1}{\#\Omega}\sum_{\{S_{1},\ldots,S_{N}\}}f(S_{1},\ldots,S_{N}).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+The results of the simulation, measuring the average energy 
+\begin_inset Formula $U/N$
+\end_inset
+
+ and specific heat 
+\begin_inset Formula $C/N$
+\end_inset
+
+ per spin and comparing them to the theoretical predictions, 
+\begin_inset Formula 
+\[
+U_{theory}=-\frac{N-1}{N}\tanh\beta
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+C_{theory}=\frac{N-1}{N}\left(\beta/\cosh\beta\right)^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+can be seen in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:ising1d_1000"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:ising1d_10000"
+
+\end_inset
+
+ with 
+\begin_inset Formula $N_{samples}=1000$
+\end_inset
+
+ and 
+\begin_inset Formula $N_{samples}=10000$
+\end_inset
+
+ respectively.
+ 
+\begin_inset Formula $\sigma_{rel}$
+\end_inset
+
+ denote relative errors, e.g.
+ 
+\begin_inset Formula $\sigma_{U,rel}=\left|\frac{U/N-U_{theory}}{U_{theory}}\right|$
+\end_inset
+
+.
+ For 
+\begin_inset Formula $N_{samples}=1000$
+\end_inset
+
+ the relative errors for the energy is always smaller than 
+\begin_inset Formula $10^{-2}$
+\end_inset
+
+ and the relative error the heat capactiy is almost always smaller than
+ 
+\begin_inset Formula $10^{-2}$
+\end_inset
+
+, but increases rapidly when approaching lower temperatures 
+\begin_inset Formula $0.4K$
+\end_inset
+
+ and 
+\begin_inset Formula $0.2K$
+\end_inset
+
+.
+ For 
+\begin_inset Formula $N_{samples}=10000$
+\end_inset
+
+ the agreement is even better with a relative error for the energy that
+ is about two orders of magnitude smaller, but the same behaviour for the
+ heat capacity can be observed again.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset CommandInset include
+LatexCommand include
+filename "ising_1d_N_1000_Nsamples_1000.tex"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Results of the simulation for the 1D Ising model with 
+\begin_inset Formula $N=1000$
+\end_inset
+
+, 
+\begin_inset Formula $N_{samples}=1000$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:ising1d_1000"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset CommandInset include
+LatexCommand include
+filename "ising_1d_N_1000_Nsamples_10000.tex"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Results of the simulation for the 1D Ising model with 
+\begin_inset Formula $N=1000$
+\end_inset
+
+, 
+\begin_inset Formula $N_{samples}=10000$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:ising1d_10000"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Discussion
+\end_layout
+
+\begin_layout Standard
+It can be seen that the simulation generally gives a good prediction for
+ both the average energy per spin 
+\begin_inset Formula $U/N$
+\end_inset
+
+ and specific heat capacity per spin 
+\begin_inset Formula $C/N$
+\end_inset
+
+ in the one-dimensional case if the temperature is not close to zero.
+ For low temperatures, 
+\begin_inset Formula $T=0.2$
+\end_inset
+
+ is the most obvious, the simulation does not give acceptable results for
+ the heat capacity.
+ This behaviour persists even for a higher number of samples, which suggests
+ that the MMC method might be a generally inadequate method for this case.
+\end_layout
+
+\begin_layout Section*
+2D Ising model
+\end_layout
+
+\begin_layout Subsection*
+Introduction
+\end_layout
+
+\begin_layout Standard
+In the two-dimensional model the total energy of the system becomes (with
+ free boundary conditions):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E=-\sum_{i=1}^{N-1}\sum_{j=1}^{N}S_{i,j}S_{i+1,j}-\sum_{i=1}^{N}\sum_{j=1}^{N-1}S_{i,j}S_{i,j+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In contrast to the one-dimensional model further analysis is carried out
+ regarding the magnetic properties of the system.
+ The average magnetization per spin is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+M/N^{2}=\left\langle \sum_{i,j=1}^{N}S_{i,j}\right\rangle =\frac{\sum_{\{S_{1,1},\ldots,S_{N,N}\}}\exp(-\beta E)\sum_{i,j=1}^{N}S_{i,j}}{\sum_{\{S_{1,1},\ldots,S_{N,N}\}}\exp(-\beta E)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Simulation model
+\end_layout
+
+\begin_layout Standard
+For the two-dimensional Ising model the only changes from the one-dimensional
+ case are the calculation of the energy-difference for obvious geometric
+ reasons and the increase from 
+\begin_inset Formula $N$
+\end_inset
+
+ to 
+\begin_inset Formula $N^{2}$
+\end_inset
+
+ substeps per sample to maintain the system-scale-independence of a step
+ of the MMC method.
+\end_layout
+
+\begin_layout Subsection*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+The results of the simulation can be seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:ising2d"
+
+\end_inset
+
+.
+ The average energy per spin rises monotonously for rising 
+\begin_inset Formula $T$
+\end_inset
+
+ and while the curve for 
+\begin_inset Formula $N=10$
+\end_inset
+
+ exhibits some noise, 
+\begin_inset Formula $N=50$
+\end_inset
+
+ and 
+\begin_inset Formula $N=100$
+\end_inset
+
+ look comparable and sufficiently smooth.
+ The heat capacity decreases with higher temperature, while showing some
+ noise for temperatures below the critical temperature.
+ The average magnetization per spin clearly shows for every number of 
+\begin_inset Formula $N$
+\end_inset
+
+ that below the critical temperature 
+\begin_inset Formula $T_{C}=\frac{2}{\ln(1+\sqrt{2})}$
+\end_inset
+
+ there is some ferromagnetic behaviour with finite and occasionally very
+ high magnetizations.
+ At the critical temperature universally a phase transition can be observed
+ in that the magneziation rapidly drops to zero.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ising_2d.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Formula $U/N^{2}$
+\end_inset
+
+, 
+\begin_inset Formula $C/N^{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $M/N^{2}$
+\end_inset
+
+ over 
+\begin_inset Formula $T$
+\end_inset
+
+ for a different number of spins 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:ising2d"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Discussion
+\end_layout
+
+\begin_layout Standard
+The MMC method is not just applicable to determine the energy or the heat
+ capacity for a 1D Ising model system, but also clearly reproduces the same
+ magnetic phase transition exhibited by the 2D Ising model.
+ It is easy to implement and computationally very inexpensive, making the
+ execution very feasible on a personal computer.
+ Combined with it's potency to analyze systems such as the Ising model it
+ has understandably become a very popular method.
+ 
+\end_layout
+
+\begin_layout Part*
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+* Introduction: describe briefly the problem you are modeling and simulating
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation model and method: describe briefly the model and simulation
+ method in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation results: show figures (with figure captions!) depicting the
+ simulation results.
+ Give a brief description of the results in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Discussion: Summarize your findings
+\end_layout
+
+\begin_layout Plain Layout
+* Appendix: Include the listing of the program
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Appendix
+\end_layout
+
+\begin_layout Subsection*
+Program for 1D Ising model 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import math
+\end_layout
+
+\begin_layout Plain Layout
+
+import random
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+PERIODIC_BOUNDARIES = False
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#N = 10
+\end_layout
+
+\begin_layout Plain Layout
+
+#N = 100
+\end_layout
+
+\begin_layout Plain Layout
+
+N = 1000
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+N_SAMPLES = 1000
+\end_layout
+
+\begin_layout Plain Layout
+
+N_SAMPLES = 10000
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def energy(spins):
+\end_layout
+
+\begin_layout Plain Layout
+
+    # shift elements
+\end_layout
+
+\begin_layout Plain Layout
+
+    shifted = np.roll(spins, -1)
+\end_layout
+
+\begin_layout Plain Layout
+
+    if not PERIODIC_BOUNDARIES:
+\end_layout
+
+\begin_layout Plain Layout
+
+        shifted[-1] = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+    return -np.dot(spins, shifted)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def U_theory(N, beta):
+\end_layout
+
+\begin_layout Plain Layout
+
+    return -(N - 1)/N * np.tanh(beta)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def C_theory(N, beta):
+\end_layout
+
+\begin_layout Plain Layout
+
+    x = beta / np.cosh(beta)
+\end_layout
+
+\begin_layout Plain Layout
+
+    return (N - 1)/N * x*x
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def mmc(beta):
+\end_layout
+
+\begin_layout Plain Layout
+
+    U = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+    C = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+    spins = np.random.randint(2, size=N) * 2 - 1 # N random numbers, either
+ -1 or 1
+\end_layout
+
+\begin_layout Plain Layout
+
+    e = energy(spins)
+\end_layout
+
+\begin_layout Plain Layout
+
+    N_WAIT = int(N_SAMPLES / 10)
+\end_layout
+
+\begin_layout Plain Layout
+
+    for sample in range(N_SAMPLES + N_WAIT):
+\end_layout
+
+\begin_layout Plain Layout
+
+        for i in range(N):
+\end_layout
+
+\begin_layout Plain Layout
+
+            j = random.randint(0, N-1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+            #e_old = rest + spins[j] * (spins[j-1] + spins[j+1])
+\end_layout
+
+\begin_layout Plain Layout
+
+            # e_new = rest - spins[j] * (spins[j-1] + spins[j+1])
+\end_layout
+
+\begin_layout Plain Layout
+
+            # delta_e = e_new - e_old = 2 * spins[j] * (spins[j-1] + spins[j+1])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+            # assuming spins[j] is flipped
+\end_layout
+
+\begin_layout Plain Layout
+
+            delta_e = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+            if j > 0: delta_e += spins[j-1]
+\end_layout
+
+\begin_layout Plain Layout
+
+            if j < N-1: delta_e += spins[j+1]
+\end_layout
+
+\begin_layout Plain Layout
+
+            delta_e *= 2.0 * spins[j]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+            q = math.exp(-delta_e * beta)
+\end_layout
+
+\begin_layout Plain Layout
+
+            if q > random.random():
+\end_layout
+
+\begin_layout Plain Layout
+
+                # flip the spin
+\end_layout
+
+\begin_layout Plain Layout
+
+                spins[j] = -spins[j]
+\end_layout
+
+\begin_layout Plain Layout
+
+                e += delta_e
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        if sample >= N_WAIT:
+\end_layout
+
+\begin_layout Plain Layout
+
+            U += e
+\end_layout
+
+\begin_layout Plain Layout
+
+            C += e*e
+\end_layout
+
+\begin_layout Plain Layout
+
+    U = U / N_SAMPLES
+\end_layout
+
+\begin_layout Plain Layout
+
+    C = beta*beta * (C / N_SAMPLES - U*U)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    return U, C
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+print("T           beta         U/N          C/N         U_t          C_t
+         err_U       err_C")
+\end_layout
+
+\begin_layout Plain Layout
+
+for T in np.arange(4.0, 0.19, -0.2):
+\end_layout
+
+\begin_layout Plain Layout
+
+    k_B = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+    beta = 1 / (k_B * T)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    U, C = mmc(beta)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    U_t = U_theory(N, beta)
+\end_layout
+
+\begin_layout Plain Layout
+
+    C_t = C_theory(N, beta)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    print("{0:.3E}   {1:.3E}    {2:.3E}   {3:.3E}   {4:.3E}   {5:.3E}   {6:.3E}
+   {7:.3E}".format(
+\end_layout
+
+\begin_layout Plain Layout
+
+        T, beta, U/N, C/N, U_t, C_t, np.abs((U_t - U/N)/U_t), np.abs((C_t
+ - C/N)/C_t)))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Program for 2D Ising model
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import math
+\end_layout
+
+\begin_layout Plain Layout
+
+import random
+\end_layout
+
+\begin_layout Plain Layout
+
+from multiprocessing import Pool
+\end_layout
+
+\begin_layout Plain Layout
+
+from functools import partial
+\end_layout
+
+\begin_layout Plain Layout
+
+import json
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+PERIODIC_BOUNDARIES = False
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+N_SAMPLES = 1000
+\end_layout
+
+\begin_layout Plain Layout
+
+#N_SAMPLES = 10000
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def energy(spins):
+\end_layout
+
+\begin_layout Plain Layout
+
+    # shift elements on y axis <=> spins[i][j] gets the value of spins[i+1][j]
+\end_layout
+
+\begin_layout Plain Layout
+
+    shiftedy = np.roll(spins, -1, 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+    # spins[i][j] gets the value of spins[i][j+1]
+\end_layout
+
+\begin_layout Plain Layout
+
+    shiftedx = np.roll(spins, -1, 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    if not PERIODIC_BOUNDARIES:
+\end_layout
+
+\begin_layout Plain Layout
+
+        shiftedy[-1,:] = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+        shiftedx[:,-1] = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    # multiply matrices component wise
+\end_layout
+
+\begin_layout Plain Layout
+
+    return - np.sum(np.multiply(spins, shiftedy)) - np.sum(np.multiply(spins,
+ shiftedx))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def mmc(T, N):
+\end_layout
+
+\begin_layout Plain Layout
+
+    print("T =", T)
+\end_layout
+
+\begin_layout Plain Layout
+
+    k_B = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+    beta = 1 / (k_B * T)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    U, C, M = 0, 0, 0
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    # N random numbers, either -1 or 1
+\end_layout
+
+\begin_layout Plain Layout
+
+    spins = np.random.randint(2, size=(N,N)) * 2 - 1
+\end_layout
+
+\begin_layout Plain Layout
+
+    e = energy(spins)
+\end_layout
+
+\begin_layout Plain Layout
+
+    N_WAIT = int(N_SAMPLES / 10)
+\end_layout
+
+\begin_layout Plain Layout
+
+    N_MEASUREMENTS = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+    for sample in range(N_SAMPLES + N_WAIT):
+\end_layout
+
+\begin_layout Plain Layout
+
+        for n in range(N*N):
+\end_layout
+
+\begin_layout Plain Layout
+
+            j1, j2 = random.randint(0, N-1), random.randint(0, N-1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+            # assuming spins[j1,j2] is flipped
+\end_layout
+
+\begin_layout Plain Layout
+
+            delta_e = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+            if j1 > 0: delta_e += spins[j1-1,j2]
+\end_layout
+
+\begin_layout Plain Layout
+
+            if j2 > 0: delta_e += spins[j1,j2-1]
+\end_layout
+
+\begin_layout Plain Layout
+
+            if j1 < N-1: delta_e += spins[j1+1,j2]
+\end_layout
+
+\begin_layout Plain Layout
+
+            if j2 < N-1: delta_e += spins[j1,j2+1]
+\end_layout
+
+\begin_layout Plain Layout
+
+            delta_e *= 2.0 * spins[j1,j2]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+            q = math.exp(-delta_e * beta)
+\end_layout
+
+\begin_layout Plain Layout
+
+            if q > random.random():
+\end_layout
+
+\begin_layout Plain Layout
+
+                # flip the spin
+\end_layout
+
+\begin_layout Plain Layout
+
+                spins[j1,j2] = -spins[j1,j2]
+\end_layout
+
+\begin_layout Plain Layout
+
+                e += delta_e
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        if sample >= N_WAIT:
+\end_layout
+
+\begin_layout Plain Layout
+
+            N_MEASUREMENTS += 1
+\end_layout
+
+\begin_layout Plain Layout
+
+            U += e
+\end_layout
+
+\begin_layout Plain Layout
+
+            C += e*e
+\end_layout
+
+\begin_layout Plain Layout
+
+            M += abs(np.sum(spins))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    U = U / N_MEASUREMENTS
+\end_layout
+
+\begin_layout Plain Layout
+
+    C = beta*beta * (C / N_MEASUREMENTS - U*U)
+\end_layout
+
+\begin_layout Plain Layout
+
+    M = M / N_MEASUREMENTS
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    return U, C, M
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if __name__ == '__main__':
+\end_layout
+
+\begin_layout Plain Layout
+
+    jsonData = []
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    Ts = np.arange(0.2, 4.1, 0.2)
+\end_layout
+
+\begin_layout Plain Layout
+
+    #for i_N, N in enumerate([10, 50, 100]):
+\end_layout
+
+\begin_layout Plain Layout
+
+    for i_N, N in enumerate([10, 50, 100]):
+\end_layout
+
+\begin_layout Plain Layout
+
+        print("N =", N)
+\end_layout
+
+\begin_layout Plain Layout
+
+        _mmc = partial(mmc, N=N)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        U, C, M = [], [], []
+\end_layout
+
+\begin_layout Plain Layout
+
+        with Pool(processes=8) as pool:
+\end_layout
+
+\begin_layout Plain Layout
+
+            for vU, vC, vM in pool.map(_mmc, Ts):
+\end_layout
+
+\begin_layout Plain Layout
+
+                U.append(vU)
+\end_layout
+
+\begin_layout Plain Layout
+
+                C.append(vC)
+\end_layout
+
+\begin_layout Plain Layout
+
+                M.append(vM)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        jsonData.append({'N': N, 'T': list(Ts), 'U': U, 'C': C, 'M': M})
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    with open("ising_2d_data.json", "w") as outFile:
+\end_layout
+
+\begin_layout Plain Layout
+
+        json.dump(jsonData, outFile)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Program for 2D Ising model (plotting)
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import json
+\end_layout
+
+\begin_layout Plain Layout
+
+import math
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def M_theory(beta):
+\end_layout
+
+\begin_layout Plain Layout
+
+    beta_C = 1 / (2 / math.log(1 + math.sqrt(2)))
+\end_layout
+
+\begin_layout Plain Layout
+
+    if beta < beta_C:
+\end_layout
+
+\begin_layout Plain Layout
+
+        return 0
+\end_layout
+
+\begin_layout Plain Layout
+
+    else:
+\end_layout
+
+\begin_layout Plain Layout
+
+        x = math.sinh(2*beta)
+\end_layout
+
+\begin_layout Plain Layout
+
+        return math.pow(1 - 1/(x*x*x*x), 1/8)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.rc('text', usetex=True)
+\end_layout
+
+\begin_layout Plain Layout
+
+f, axarr = plt.subplots(3, 1, figsize=(15,10))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(3):
+\end_layout
+
+\begin_layout Plain Layout
+
+    axarr[i].set_xlabel(r"$T$")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[0].set_ylabel(r"$U/N^2$")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[1].set_ylabel(r"$C/N^2$")
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[2].set_ylabel(r"$M/N^2$")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+with open("ising_2d_data.json") as inFile:
+\end_layout
+
+\begin_layout Plain Layout
+
+    jsonData = json.load(inFile)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for data_set in jsonData:
+\end_layout
+
+\begin_layout Plain Layout
+
+    N = data_set["N"]
+\end_layout
+
+\begin_layout Plain Layout
+
+    Ts = np.array(data_set["T"])
+\end_layout
+
+\begin_layout Plain Layout
+
+    U = np.array(data_set["U"])
+\end_layout
+
+\begin_layout Plain Layout
+
+    C = np.array(data_set["C"])
+\end_layout
+
+\begin_layout Plain Layout
+
+    M = np.array(data_set["M"])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    label = "N = {}".format(N)
+\end_layout
+
+\begin_layout Plain Layout
+
+    axarr[0].plot(Ts, U/N/N, label=label)
+\end_layout
+
+\begin_layout Plain Layout
+
+    axarr[1].plot(Ts, C/N/N, label=label)
+\end_layout
+
+\begin_layout Plain Layout
+
+    axarr[2].plot(Ts, M/N/N, label=label)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+axarr[2].plot(Ts, np.vectorize(M_theory)(1/Ts), label="Theory")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(3):
+\end_layout
+
+\begin_layout Plain Layout
+
+    axarr[i].legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig("ising_2d.pdf")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
