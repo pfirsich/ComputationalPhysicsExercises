@@ -1,0 +1,2245 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Computational Physics - Exercise 4
+\end_layout
+
+\begin_layout Author
+Joel Schumacher, 309231, joel.schumacher@rwth-aachen.de
+\end_layout
+
+\begin_layout Section*
+Euler Integration
+\end_layout
+
+\begin_layout Subsection*
+Introduction
+\end_layout
+
+\begin_layout Standard
+We assume a system of a single harmonic oscillator with 
+\begin_inset Formula $m=1$
+\end_inset
+
+ and 
+\begin_inset Formula $k=1$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+V(x) & =x^{2}/2\\
+V'(x) & =x\\
+a(x) & =-x
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The boundary conditions are:
+\begin_inset Formula 
+\begin{align*}
+x(0) & =0\\
+v(0) & =1
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Simulation model
+\end_layout
+
+\begin_layout Standard
+To examine the time evolution of the formerly described system, we employ
+ Euler integration, which algorithm is as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+x(t+\Delta t) & =x(t)+v(t)\Delta t\\
+v(t+\Delta t) & =v(t)+a(x(t))\Delta t
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The euler algorithm is not symplectic, meaning it does not conserve phase
+ space volume and therefore energy and is not stable.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+In figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:euler"
+
+\end_inset
+
+ the unstable behaviour of the Euler algorithm can be observed for every
+ time step size.
+ A smaller timesteps merely corresponds to a slower divergence of the exact
+ result.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex1_ex2_euler.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time evolution of the position of the harmonic oscillator simulated using
+ Euler integration.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:euler"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Euler-Cromer Integration
+\end_layout
+
+\begin_layout Subsection*
+Simulation model
+\end_layout
+
+\begin_layout Standard
+Additionally the Euler-Cromer algorithm is used, which differs from the
+ Euler algorithm, by either using the new velocity to calculate the new
+ position or by using the new position to calculate the acceleration and
+ consequently the new velocity.
+ Formally:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+v(t+\Delta t) & =v(t)+a(x(t))\Delta t\\
+x(t+\Delta t) & =x(t)+v(t+\Delta t)\Delta t
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which will henceforth be referred to as 
+\begin_inset Quotes eld
+\end_inset
+
+method A
+\begin_inset Quotes erd
+\end_inset
+
+.
+ And also:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+x(t+\Delta t) & =x(t)+v(t)\Delta t\\
+v(t+\Delta t) & =v(t)+a(x(t+\Delta t))\Delta t
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+from now on called 
+\begin_inset Quotes eld
+\end_inset
+
+method B
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The Euler-Cromer variation of the algorithm is symplectic and significantly
+ more stable than the regular Euler method.
+\end_layout
+
+\begin_layout Subsection*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+In figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cromera"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cromerb"
+
+\end_inset
+
+ it is clearly visible that the very unstable behaviour disappeared and
+ we no longer observe an obvious divergence from the exact solution for
+ small and time step widths.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex1_ex2_eulerca.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time evolution of harmonic oscillator using the Euler-Cromer algorithm (method
+ A).
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cromera"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex1_ex2_eulercb.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time evolution of harmonic oscillator using the Euler-Cromer algorithm (method
+ B).
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cromerb"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When looking at smaller time ranges and also considering the total energy
+ of the system, we can observe that in general the simulation is in good
+ agreement with the exact solution as can be seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cromera_energy"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cromerb_energy"
+
+\end_inset
+
+.
+ The energy however shows slight deviations for both method A and B.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex2_ex3_eulerca.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time evolution of harmonic oscillator (position, velocity, energy) using
+ the Euler-Cromer algorithm (method A).
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cromera_energy"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex2_ex3_eulercb.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time evolution of harmonic oscillator (position, velocity, energy) using
+ the Euler-Cromer algorithm (method B).
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cromerb_energy"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Velocity Verlet Integration
+\end_layout
+
+\begin_layout Subsection*
+Simulation model
+\end_layout
+
+\begin_layout Standard
+The velocity verlet integration is a second order integrator, which a widely
+ used integrator for molecular dynamics, because it is computationally relativel
+y inexpensive, symplectic and time-reversible.
+ The algorithm is as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+x(t+\Delta t) & =x(t)\Delta t+\frac{1}{2}a(x(t))(\Delta t)^{2}\\
+v(t+\Delta t) & =v(t)+\frac{1}{2}\left[a(x(t))+a(x(t+\Delta t)\right]\Delta t
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+In figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:verlet_energy"
+
+\end_inset
+
+ we can clearly see a similarly good agreement with the exact solution,
+ but also a constant energy throughout the whole integration time.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex2_ex3_verlet.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time evolution of harmonic oscillator (position, velocity, energy) using
+ the Velocity Verlet algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:verlet_energy"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Many-Body Velocity Verlet Integration
+\end_layout
+
+\begin_layout Subsection*
+Introduction
+\end_layout
+
+\begin_layout Standard
+We consider a system with the following Hamiltonian:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+H & =\frac{1}{2}\sum_{n=1}^{N}v_{n}^{2}+\frac{1}{2}\sum_{n=1}^{N-1}(x_{n}-x_{n+1})^{2}\\
+\frac{\partial V}{\partial x_{k}} & =2x_{k}-x_{k-1}-x_{k+1},1<k<N\\
+\frac{\partial V}{\partial x_{1}} & =x_{1}-x_{2}\\
+\frac{\partial V}{\partial x_{N}} & =x_{N}-x_{N-1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The boundary conditions are one of the following:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+v_{i}(0) & =0\forall i\\
+x_{i}(0) & =0\forall i\neq N/2\\
+x_{N/2}(0) & =1
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+referred to as boundary conditions 1,
+\begin_inset Formula 
+\begin{align*}
+v_{i}(0) & =0\forall i\\
+x_{i}(0) & =\sin\frac{\pi i}{N+1}
+\end{align*}
+
+\end_inset
+
+ referred to as boundary conditions 2a and
+\begin_inset Formula 
+\begin{align*}
+v_{i}(0) & =0\forall i\\
+x_{i}(0) & =\sin\frac{\pi Ni}{2(N+1)}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+called boundary conditions 2b.
+\end_layout
+
+\begin_layout Standard
+For this system Velocity Verlet integration, as described in the previous
+ section, is used.
+\end_layout
+
+\begin_layout Section*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+Comparing different timesteps (
+\begin_inset Formula $\Delta t=0.1$
+\end_inset
+
+ and 
+\begin_inset Formula $\Delta t=0.01$
+\end_inset
+
+ in figure x and y respectively) it becomes clear, that the constancy of
+ the total energy is worse for bigger time steps.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex4_N=4_dt=0.1_boundaries=1_curves.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time evolution of the position and total energy of 4 coupled harmonic oscillator
+s simulated using Velocity Verlet integration with 
+\begin_inset Formula $\Delta t=0.1$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:mb_curves_n=4,dt=0.1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex4_N=4_dt=0.01_boundaries=1_curves.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time evolution of the position and total energy of 4 coupled harmonic oscillator
+s simulated using Velocity Verlet integration with 
+\begin_inset Formula $\Delta t=0.\text{0}1$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:mb_curves_N=4,dt=0.01"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To compare the different boundary conditions a raster plot is used.
+ The plots for the boundary conditions 1 can be found in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:raster_1"
+
+\end_inset
+
+.
+ For boundary conditions 2a and 2b they can be found in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:raster_2a"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:raster_2b"
+
+\end_inset
+
+ respectively.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex4_dt=0.01_boundaries=1_raster.pdf
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Raster plots showing the displacement of each oscillator on a column over
+ time (down) for boundary conditions 1.
+ Top is 
+\begin_inset Formula $N=4$
+\end_inset
+
+, middle is 
+\begin_inset Formula $N=16$
+\end_inset
+
+, bottom is 
+\begin_inset Formula $N=128$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\Delta t=0.01$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:raster_1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex4_dt=0.01_boundaries=2_raster.pdf
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Raster plots showing the displacement of each oscillator on a column over
+ time (down) for boundary conditions 2a.
+ Top is 
+\begin_inset Formula $N=4$
+\end_inset
+
+, middle is 
+\begin_inset Formula $N=16$
+\end_inset
+
+, bottom is 
+\begin_inset Formula $N=128$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\Delta t=0.01$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:raster_2a"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ex4_dt=0.01_boundaries=3_raster.pdf
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Raster plots showing the displacement of each oscillator on a column over
+ time (down) for boundary conditions 2b.
+ Top is 
+\begin_inset Formula $N=4$
+\end_inset
+
+, middle is 
+\begin_inset Formula $N=16$
+\end_inset
+
+, bottom is 
+\begin_inset Formula $N=128$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\Delta t=0.01$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:raster_2b"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Discussion
+\end_layout
+
+\begin_layout Standard
+As seen by the significant divergence of the simulation in the first section
+ of this exercise the Euler method is not very useful, considering it's
+ instability and bad energy convergence.
+ A simple change in the form of the Euler-Cromer algorithm can give us symplecti
+city and therefore a much more stable behaviour.
+ It's use is therefore much higher, but because of a lack of time-reversal
+ symmetry energy conservation is still not guaranteed, as we can also see
+ in the short time-scale plots of the Euler-Cromer based simulation.
+ The Velocity Verlet integration on the other hand does have the time reversal
+ property and therefore does guarantee energy conservation, which can even
+ be observed in the rather chaotic many body system.
+ The instability of the total energy in the coupled oscillator plot for
+ 
+\begin_inset Formula $\Delta t=0.1$
+\end_inset
+
+ can be attributed to the fact that the dynamics of the system have a shorter
+ characteristic time scale than can be justified by our time step and therefore
+ the degree of linearization of our numerical integration.
+\end_layout
+
+\begin_layout Standard
+For the coupled system the boundary conditions 1 have 
+\begin_inset Formula $N$
+\end_inset
+
+-independent total energy since only one oscillator is displaced initially.
+ The system effectively behaves as if there was an energy source in the
+ middle of the system which emits waves with a frequency that is independent
+ of 
+\begin_inset Formula $N$
+\end_inset
+
+ that are reflected at the boundaries, which is exactly what is observed.
+ Boundary conditions 2a correspond to a very low frequency (with the wavelength
+ corresponding to the scale of the system) wave propagating through the
+ system.
+ The total energy is very low, since the average distance between the oscillator
+s is small.
+ For boundary conditions 2b the total energy is very high, since the initial
+ spatial frequency of the displacement is very high, i.e.
+ the average distance between neighbouring oscillators is high as well.
+ It is similar to the first case, but with a high frequency wave being propagate
+d.
+ In both cases each individual oscillator oscillates very regularly, like
+ an individual free oscillator, with a frequency corresponding to the initial
+ spatial frequency, i.e.
+ the scale of the system.
+ 
+\end_layout
+
+\begin_layout Standard
+In conclusion Euler integration, without Cromer's improvement is not very
+ useful for physical simulations.
+ Cromer's improvement makes it useful again, but should only be employed
+ if very high performance is needed.
+ In most cases the Velocity Verlet method shows significantly more accurate,
+ unproblematic behaviour which can not be made up for by it's minorly higher
+ demands computationally.
+ Both the Euler-Cromer algorithm and Velocity Verlet algorithm only need
+ one evaluation of the force per time step and only differ in the amount
+ of arithmetic operations (Velocity Verlet needs one multiplication and
+ two additions more).
+ 
+\end_layout
+
+\begin_layout Part*
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+* Introduction: describe briefly the problem you are modeling and simulating
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation model and method: describe briefly the model and simulation
+ method in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation results: show figures (with figure captions!) depicting the
+ simulation results.
+ Give a brief description of the results in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Discussion: Summarize your findings
+\end_layout
+
+\begin_layout Plain Layout
+* Appendix: Include the listing of the program
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Appendix
+\end_layout
+
+\begin_layout Subsection*
+Program exercise 1 and first part of 2
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import sys
+\end_layout
+
+\begin_layout Plain Layout
+
+import math
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if len(sys.argv) > 1:
+\end_layout
+
+\begin_layout Plain Layout
+
+    INTEGRATION_TYPE = sys.argv[1]
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+    INTEGRATION_TYPE = "euler"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if INTEGRATION_TYPE not in ["euler", "eulerca", "eulercb"]:
+\end_layout
+
+\begin_layout Plain Layout
+
+    print("Invalid integration type!")
+\end_layout
+
+\begin_layout Plain Layout
+
+    quit()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def a(x):
+\end_layout
+
+\begin_layout Plain Layout
+
+    return -x # k = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def integrate_euler(x, v, dt):
+\end_layout
+
+\begin_layout Plain Layout
+
+    xn = x + v * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+    vn = v + a(x) * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+    return xn, vn
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def integrate_euler_cromer_a(x, v, dt):
+\end_layout
+
+\begin_layout Plain Layout
+
+    vn = v + dt * a(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+    xn = x + dt * vn
+\end_layout
+
+\begin_layout Plain Layout
+
+    return xn, vn
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def integrate_euler_cromer_b(x, v, dt):
+\end_layout
+
+\begin_layout Plain Layout
+
+    xn = x + v * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+    vn = v + a(xn) * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+    return xn, vn
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+maxT = 1000
+\end_layout
+
+\begin_layout Plain Layout
+
+for dt in [0.1, 0.01, 0.001]:
+\end_layout
+
+\begin_layout Plain Layout
+
+    N = math.floor(1000/dt)
+\end_layout
+
+\begin_layout Plain Layout
+
+    t = np.linspace(0, N*dt, num=N)
+\end_layout
+
+\begin_layout Plain Layout
+
+    x, v = np.zeros(N), np.ones(N)
+\end_layout
+
+\begin_layout Plain Layout
+
+    for i in range(1, N):
+\end_layout
+
+\begin_layout Plain Layout
+
+        if INTEGRATION_TYPE == "euler":
+\end_layout
+
+\begin_layout Plain Layout
+
+            x[i], v[i] = integrate_euler(x[i-1], v[i-1], dt)
+\end_layout
+
+\begin_layout Plain Layout
+
+        elif INTEGRATION_TYPE == "eulerca":
+\end_layout
+
+\begin_layout Plain Layout
+
+            x[i], v[i] = integrate_euler_cromer_a(x[i-1], v[i-1], dt)
+\end_layout
+
+\begin_layout Plain Layout
+
+        elif INTEGRATION_TYPE == "eulercb":
+\end_layout
+
+\begin_layout Plain Layout
+
+            x[i], v[i] = integrate_euler_cromer_b(x[i-1], v[i-1], dt)
+\end_layout
+
+\begin_layout Plain Layout
+
+        else:
+\end_layout
+
+\begin_layout Plain Layout
+
+            print("Invalid integration type!")
+\end_layout
+
+\begin_layout Plain Layout
+
+            quit()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    plt.plot(t, x, label="dt = {}".format(dt))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+t = np.linspace(0, maxT, 100000)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, np.sin(t), linestyle="--", label="exact", linewidth=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylim(-2, 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.xlabel("t")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylabel("x(t)")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig("ex1_ex2_{}.pdf".format(INTEGRATION_TYPE))
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Program for exercise second part of 2 and 3
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import sys
+\end_layout
+
+\begin_layout Plain Layout
+
+import math
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if len(sys.argv) > 1:
+\end_layout
+
+\begin_layout Plain Layout
+
+    INTEGRATION_TYPE = sys.argv[1]
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+    INTEGRATION_TYPE = "verlet"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if INTEGRATION_TYPE not in ["verlet", "eulerca", "eulercb"]:
+\end_layout
+
+\begin_layout Plain Layout
+
+    print("Invalid integration type!")
+\end_layout
+
+\begin_layout Plain Layout
+
+    quit()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def a(x):
+\end_layout
+
+\begin_layout Plain Layout
+
+    return -x # k = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def integrate_euler_cromer_a(x, v, dt):
+\end_layout
+
+\begin_layout Plain Layout
+
+    vn = v + dt * a(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+    xn = x + dt * vn
+\end_layout
+
+\begin_layout Plain Layout
+
+    return xn, vn
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def integrate_euler_cromer_b(x, v, dt):
+\end_layout
+
+\begin_layout Plain Layout
+
+    xn = x + v * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+    vn = v + a(xn) * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+    return xn, vn
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+dt = 0.01
+\end_layout
+
+\begin_layout Plain Layout
+
+N = 1000
+\end_layout
+
+\begin_layout Plain Layout
+
+maxT = N * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+t = np.linspace(0, maxT, num=N)
+\end_layout
+
+\begin_layout Plain Layout
+
+x, v = np.zeros(N), np.ones(N)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if INTEGRATION_TYPE == "verlet":
+\end_layout
+
+\begin_layout Plain Layout
+
+    # one step euler (-cromer A)
+\end_layout
+
+\begin_layout Plain Layout
+
+    v[1] = v[0] + a(x[0]) * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+    x[1] = x[0] + v[1] * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+    lastAccell = a(x[1])
+\end_layout
+
+\begin_layout Plain Layout
+
+    startIndex = 2
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+    startIndex = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(startIndex, N):
+\end_layout
+
+\begin_layout Plain Layout
+
+    if INTEGRATION_TYPE == "verlet":
+\end_layout
+
+\begin_layout Plain Layout
+
+        # velocity verlet
+\end_layout
+
+\begin_layout Plain Layout
+
+        x[i] = x[i-1] + v[i-1]*dt + 0.5 * lastAccell * dt*dt
+\end_layout
+
+\begin_layout Plain Layout
+
+        accell = a(x[i])
+\end_layout
+
+\begin_layout Plain Layout
+
+        v[i] = v[i-1] + 0.5*(lastAccell + accell)*dt
+\end_layout
+
+\begin_layout Plain Layout
+
+        lastAccell = accell
+\end_layout
+
+\begin_layout Plain Layout
+
+    elif INTEGRATION_TYPE == "eulerca":
+\end_layout
+
+\begin_layout Plain Layout
+
+        x[i], v[i] = integrate_euler_cromer_a(x[i-1], v[i-1], dt)
+\end_layout
+
+\begin_layout Plain Layout
+
+    elif INTEGRATION_TYPE == "eulercb":
+\end_layout
+
+\begin_layout Plain Layout
+
+        x[i], v[i] = integrate_euler_cromer_b(x[i-1], v[i-1], dt)
+\end_layout
+
+\begin_layout Plain Layout
+
+    else:
+\end_layout
+
+\begin_layout Plain Layout
+
+        print("Invalid integration type!")
+\end_layout
+
+\begin_layout Plain Layout
+
+        quit()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, x, label="x(t)".format(dt))
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, v, label="v(t)".format(dt))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, np.sin(t), linestyle="--", label="exact")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Ee = np.full(N, 0.5)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, Ee, linestyle="--", label="E exact")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, np.power(v, 2)/2 + np.power(x, 2)/2)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylim(-1, 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.xlabel("t")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylabel("x(t), v(t), E(t)")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig("ex2_ex3_{}.pdf".format(INTEGRATION_TYPE))
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Program for exercise 4 (coupled oscillators)
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import sys
+\end_layout
+
+\begin_layout Plain Layout
+
+import math
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if len(sys.argv) > 1:
+\end_layout
+
+\begin_layout Plain Layout
+
+    BOUNDARY_TYPE = int(sys.argv[1])
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+    BOUNDARY_TYPE = 2
+\end_layout
+
+\begin_layout Plain Layout
+
+print("Boundary type:", BOUNDARY_TYPE)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def a(x, i):
+\end_layout
+
+\begin_layout Plain Layout
+
+    if i == 0:
+\end_layout
+
+\begin_layout Plain Layout
+
+        return -(x[0] - x[1])
+\end_layout
+
+\begin_layout Plain Layout
+
+    elif i == x.size - 1:
+\end_layout
+
+\begin_layout Plain Layout
+
+        return -(x[i] - x[i-1])
+\end_layout
+
+\begin_layout Plain Layout
+
+    else:
+\end_layout
+
+\begin_layout Plain Layout
+
+        return -(2*x[i] - x[i-1] - x[i+1])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+x_results = []
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for n_i, N in enumerate([4, 16, 128]):
+\end_layout
+
+\begin_layout Plain Layout
+
+    #for dt in [0.1]:
+\end_layout
+
+\begin_layout Plain Layout
+
+    for dt in [0.1, 0.01]:
+\end_layout
+
+\begin_layout Plain Layout
+
+        maxT = 30
+\end_layout
+
+\begin_layout Plain Layout
+
+        Nt = math.floor(maxT / dt)
+\end_layout
+
+\begin_layout Plain Layout
+
+        t = np.linspace(0, maxT, num=Nt)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        v = np.zeros((Nt, N))
+\end_layout
+
+\begin_layout Plain Layout
+
+        if BOUNDARY_TYPE == 1:
+\end_layout
+
+\begin_layout Plain Layout
+
+            x = np.zeros((Nt, N))
+\end_layout
+
+\begin_layout Plain Layout
+
+            x[0][math.floor(N/2-1)] = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+        elif BOUNDARY_TYPE == 2:
+\end_layout
+
+\begin_layout Plain Layout
+
+            x = np.zeros((Nt, N))
+\end_layout
+
+\begin_layout Plain Layout
+
+            for i in range(N):
+\end_layout
+
+\begin_layout Plain Layout
+
+                x[0][i] = np.sin(np.pi * (i+1) / (N + 1))
+\end_layout
+
+\begin_layout Plain Layout
+
+        elif BOUNDARY_TYPE == 3:
+\end_layout
+
+\begin_layout Plain Layout
+
+            x = np.zeros((Nt, N))
+\end_layout
+
+\begin_layout Plain Layout
+
+            for i in range(N):
+\end_layout
+
+\begin_layout Plain Layout
+
+                x[0][i] = np.sin(np.pi * N/2 * (i+1) / (N + 1))
+\end_layout
+
+\begin_layout Plain Layout
+
+        else:
+\end_layout
+
+\begin_layout Plain Layout
+
+            print("invalid BOUNDARY_TYPE!")
+\end_layout
+
+\begin_layout Plain Layout
+
+            quit()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        # one euler step, prepare lastAccell
+\end_layout
+
+\begin_layout Plain Layout
+
+        lastAccell = np.zeros(N)
+\end_layout
+
+\begin_layout Plain Layout
+
+        for n in range(N):
+\end_layout
+
+\begin_layout Plain Layout
+
+            v[1][n] = v[0][n] + a(x[0], n) * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+            x[1][n] = x[0][n] + v[1][n] * dt
+\end_layout
+
+\begin_layout Plain Layout
+
+            lastAccell[n] = a(x[1], n)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        # verlet integration
+\end_layout
+
+\begin_layout Plain Layout
+
+        for i in range(2, Nt):
+\end_layout
+
+\begin_layout Plain Layout
+
+            for n in range(N):
+\end_layout
+
+\begin_layout Plain Layout
+
+                x[i][n] = x[i-1][n] + v[i-1][n]*dt + 0.5 * lastAccell[n]
+ * dt*dt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+            for n in range(N):
+\end_layout
+
+\begin_layout Plain Layout
+
+                accell = a(x[i], n)
+\end_layout
+
+\begin_layout Plain Layout
+
+                v[i][n] = v[i-1][n] + 0.5*(lastAccell[n] + accell)*dt
+\end_layout
+
+\begin_layout Plain Layout
+
+                lastAccell[n] = accell
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    # plot for last dt
+\end_layout
+
+\begin_layout Plain Layout
+
+    toPlot = [0, 1, 2, 3]
+\end_layout
+
+\begin_layout Plain Layout
+
+    for i in toPlot:
+\end_layout
+
+\begin_layout Plain Layout
+
+        plt.plot(t, x[:,i], label="x_{}(t)".format(i))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    # shift, leave out last column
+\end_layout
+
+\begin_layout Plain Layout
+
+    energy = np.sum(np.power(x[:,:-1] - np.roll(x, -1, axis=1)[:,:-1], 2),
+ axis=1)/2 + 
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        np.sum(np.power(v, 2), axis=1)/2
+\end_layout
+
+\begin_layout Plain Layout
+
+    plt.plot(t, energy, label="Energy")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    plt.legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+    plt.xlabel("t")
+\end_layout
+
+\begin_layout Plain Layout
+
+    plt.ylabel("x(t), E(t)")
+\end_layout
+
+\begin_layout Plain Layout
+
+    plt.grid()
+\end_layout
+
+\begin_layout Plain Layout
+
+    plt.xlim(0, 10)
+\end_layout
+
+\begin_layout Plain Layout
+
+    plt.savefig("ex4_N={}_dt={}_boundaries={}_curves.pdf".format(N, dt, BOUNDARY_TY
+PE))
+\end_layout
+
+\begin_layout Plain Layout
+
+    #plt.show()
+\end_layout
+
+\begin_layout Plain Layout
+
+    plt.close()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    x_results.append((N,x))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# Raster plots
+\end_layout
+
+\begin_layout Plain Layout
+
+f, ax = plt.subplots(3,1)
+\end_layout
+
+\begin_layout Plain Layout
+
+for i, (N,x) in enumerate(x_results):
+\end_layout
+
+\begin_layout Plain Layout
+
+    ax[i].imshow(x, cmap="gray", interpolation="nearest", aspect=N/Nt)
+\end_layout
+
+\begin_layout Plain Layout
+
+    ax[i].set_xlabel("oscillator")
+\end_layout
+
+\begin_layout Plain Layout
+
+    ax[i].set_ylabel("time")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig("ex4_dt={}_boundaries={}_raster.pdf".format(dt, BOUNDARY_TYPE))
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.close()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
