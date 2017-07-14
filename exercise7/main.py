@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 invT1 = 0
 invT2 = 0
 M0 = [0, 1, 0]
-# phi in units of pi
-phi = 0.25
+phi = 0 # in units of pi
 
 ######
 
@@ -39,18 +38,11 @@ def _expB(t, B):
     c = math.cos(omega*t)
     s = math.sin(omega*t)
 
-    ret = np.zeros((3,3))
-    ret[0][0] = BB[0][0] + (BB[1][1] + BB[2][2]) * c
-    ret[0][1] = BB[0][1] * (1 - c) + omega * B[2] * s
-    ret[0][2] = BB[0][2] * (1 - c) - omega * B[1] * s
-
-    ret[1][0] = BB[0][1] * (1 - c) - omega * B[2] * s
-    ret[1][1] = BB[1][1] + (BB[0][0] + BB[2][2]) * c
-    ret[1][2] = BB[0][2] * (1 - c) + omega * B[0] * s
-
-    ret[2][0] = BB[0][2] * (1 - c) + omega * B[1] * s
-    ret[2][1] = BB[1][2] * (1 - c) - omega * B[0] * s
-    ret[2][2] = BB[2][2] + (BB[0][0] + BB[1][1]) * c
+    ret = BB * (1 - c)
+    ret += np.eye(3) * omega * omega * c
+    v = omega * s * B
+    # essentially: M_ij = eps_ijk * v_k (eps being the levi-civita symbol)
+    ret += np.asarray([[0,v[2],-v[1]], [-v[2],0,v[0]], [v[1],-v[0],0]])
 
     ret /= omegaSqr
 
@@ -70,7 +62,10 @@ M = np.asarray(M)
 plt.plot(t, M[:,0], label="$M^x$")
 plt.plot(t, M[:,1], label="$M^y$")
 plt.plot(t, M[:,2], label="$M^z$")
+plt.xlabel("t")
+plt.ylabel("Magnetization")
 plt.xlim(t_min, t_max)
+plt.ylim(-1,1)
 plt.legend()
 plt.grid()
 plt.savefig("invT1={},invT2={},M0={}{}{},phi={}.pdf".format(invT1, invT2, M0[0], M0[1], M0[2], phi))
