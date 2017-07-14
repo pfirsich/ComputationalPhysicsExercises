@@ -1,0 +1,1485 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement H
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Computational Physics - Exercise 7
+\end_layout
+
+\begin_layout Author
+Joel Schumacher, 309231, joel.schumacher@rwth-aachen.de
+\end_layout
+
+\begin_layout Part*
+Nuclear magnetic resonance
+\end_layout
+
+\begin_layout Section*
+Introduction
+\end_layout
+
+\begin_layout Standard
+In this exercise the goal is to solve the Bloch equations, describing the
+ time evolution of a nuclear magnetic moment 
+\begin_inset Formula $\vec{M}$
+\end_inset
+
+ in a time-dependent magnetic field 
+\begin_inset Formula $\vec{B}(t)$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+\frac{dM_{x}(t)}{dt} & =\gamma(\vec{M}(t)\times\vec{B}(t))_{x}-\frac{M_{x}(t)}{T_{2}}\\
+\frac{dM_{y}(t)}{dt} & =\gamma(\vec{M}(t)\times\vec{B}(t))_{y}-\frac{M_{y}(t)}{T_{2}}\\
+\frac{dM_{z}(t)}{dt} & =\gamma(\vec{M}(t)\times\vec{B}(t))_{z}-\frac{M_{z}(t)-M_{0}}{T_{1}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 
+\begin_inset Formula $\vec{B}(t)=\left(B^{x}(t),B^{y}(t),B^{0}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $B^{0}\gg|B^{x}(t)|,|B^{y}(t)|$
+\end_inset
+
+, 
+\begin_inset Formula $B^{0}$
+\end_inset
+
+ being a large static field.
+ 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ is the gyromagnetic ratio.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $T_{1}$
+\end_inset
+
+ is then the spin-lattice relaxation corresponding to the time scale of
+ the realignment of the spins (the alignment of 
+\begin_inset Formula $\vec{M}$
+\end_inset
+
+ with the direction of 
+\begin_inset Formula $B^{0}$
+\end_inset
+
+) and 
+\begin_inset Formula $T_{2}$
+\end_inset
+
+ is the spin-spin relaxation corresponding to the decrease of the x-y component
+ of 
+\begin_inset Formula $\vec{M}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For this system we expect the magnetic moments to precess around 
+\begin_inset Formula $B^{0}$
+\end_inset
+
+ with the Larmor frequency 
+\begin_inset Formula $f=\frac{\gamma}{2\pi}B^{0}$
+\end_inset
+
+ if they are not perfectly aligned.
+ If the spins are excited resonantly with the Larmor frequency, they can
+ be 
+\begin_inset Quotes eld
+\end_inset
+
+turned
+\begin_inset Quotes erd
+\end_inset
+
+ into our out of the x-y plane, which results in an oscillation between
+ a parallel and an anti-parallel state.
+\end_layout
+
+\begin_layout Standard
+In practical applications resonant excitation turns the magnetic moments
+ into the x-y plane and their precession around the z-axis induce a current
+ in a coil surrounding the sample, which is then measured.
+\end_layout
+
+\begin_layout Section*
+Simulation model
+\end_layout
+
+\begin_layout Standard
+The main approximation of our simulation is that the time-dependent magnetic
+ field 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ is piecewise constant in short time intervals of length 
+\begin_inset Formula $\tau$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ is constant and relaxation is ignored the Bloch equation simplifies to:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{d\vec{M}(t)}{dt}=\gamma\boldsymbol{B}\vec{M}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with:
+\begin_inset Formula 
+\[
+\boldsymbol{B}=\begin{pmatrix}0 & B^{z} & -B^{y}\\
+-B^{z} & 0 & B^{x}\\
+B^{y} & -B^{x} & 0
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which can be formally solved with:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vec{M}(t)=\exp(t\gamma\boldsymbol{B})\vec{M}(t=0)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with our piecewise approximation we can then evolve 
+\begin_inset Formula $\vec{M}(t=0)$
+\end_inset
+
+ repeatedly for small time steps 
+\begin_inset Formula $\tau$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\vec{M}(t+\tau)=\exp\left(\tau\gamma\boldsymbol{B}(t+\tau/2)\right)\vec{M}(t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+to incorporate relaxation, 
+\begin_inset Formula $\boldsymbol{B}$
+\end_inset
+
+ is modified in the following manner:
+\begin_inset Formula 
+\[
+\boldsymbol{B}\rightarrow C/2+\boldsymbol{B}+C/2
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+C=-\begin{pmatrix}\frac{1}{\gamma T_{2}} & 0 & 0\\
+0 & \frac{1}{\gamma T_{2}} & 0\\
+0 & 0 & \frac{1}{\gamma T_{1}}
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For our simulation the magnetic field will have the form:
+\begin_inset Formula 
+\[
+\vec{B}(t)=\left(h\cos\left(\omega_{0}t+\phi\right),-h\sin\left(\omega_{0}t+\phi\right),B^{0}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The parameters will be 
+\begin_inset Formula 
+\begin{align*}
+f_{0} & =4\\
+f_{1} & =1/4\\
+B^{0} & =2\pi f_{0}\\
+h & =2\pi f_{1}\\
+\gamma & =1\\
+\omega_{0} & =B^{0}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Mit h = 0, 1/T1=1/T2=0 hat man einfach präzession
+\end_layout
+
+\begin_layout Plain Layout
+Mit h = 0, 1/T1=0 hat man präzession und decay
+\end_layout
+
+\begin_layout Plain Layout
+Mit 1/T1=1/T2=0 hat man Rabi oscillations
+\end_layout
+
+\begin_layout Plain Layout
+turn spin: gamma*h*t = pi, 3pi, 5pi, ..
+\end_layout
+
+\begin_layout Plain Layout
+put into xy-plane: gamma*h*t = pi/2, 3*pi/2, 5*pi/2
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+The time evolution for 
+\begin_inset Formula $\vec{M}(t=0)=(0,1,0)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+ and for different combinations of 
+\begin_inset Formula $0$
+\end_inset
+
+ and 
+\begin_inset Formula $1$
+\end_inset
+
+ for the inverse relaxation times can be found in the figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:std_0_0"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:std_0_1"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:std_1_0"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:std_1_1"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Plots with different starting orientations can be found in the figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:M_100"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:M_001"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:M_101"
+
+\end_inset
+
+.
+ Different choices of rotations are depicted in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:phi_pi4"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:phi_pi2"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A comparison plot with it's parameters chosen equal to the example plot
+ in the exercise slides is visible in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:ex_compare"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=0,invT2=0,M0=010,phi=0.0.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=0$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=0$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(0,1,0)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:std_0_0"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=0,invT2=1,M0=010,phi=0.0.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=0$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=1$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(0,1,0)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:std_0_1"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=1,invT2=0,M0=010,phi=0.0.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=1$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=0$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(0,1,0)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:std_1_0"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=1,invT2=1,M0=010,phi=0.0.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=1$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=1$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(0,1,0)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:std_1_1"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+#################### Hier nach kommen weirdo plots
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=0,invT2=0,M0=100,phi=0.0.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=0$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=0$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(1,0,0)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:M_100"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=0,invT2=0,M0=001,phi=0.0.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=0$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=0$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(0,0,1)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:M_001"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=0,invT2=0,M0=101,phi=0.0.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=0$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=0$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(1,0,1)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:M_101"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=0,invT2=0,M0=010,phi=0.25.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=0$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=0$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(0,1,0)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=\pi/4$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:phi_pi4"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=0,invT2=0,M0=010,phi=0.5.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=0$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=0$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(0,1,0)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=\pi/2$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:phi_pi2"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invT1=0,invT2=1,M0=101,phi=0.0.pdf
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The time evolution of the magnetization with 
+\begin_inset Formula $1/T_{1}=0$
+\end_inset
+
+, 
+\begin_inset Formula $1/T_{2}=1$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{M}(t=0)=(1,0,0)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:ex_compare"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Discussion
+\end_layout
+
+\begin_layout Standard
+In the first four plots it can be observed how the finite relaxation times
+ increase the decay speed of the oscillation.
+ 
+\end_layout
+
+\begin_layout Standard
+For a starting orientation of 
+\begin_inset Formula $\vec{M}(t=0)=(1,0,0)$
+\end_inset
+
+ no beat in the x and y component can be observed since the rotation of
+ the magnetic field is around the x-axis.
+ The x-component is constant.
+ For 
+\begin_inset Formula $\vec{M}(t=0)=(0,0,1)$
+\end_inset
+
+ we see the same plot as for 
+\begin_inset Formula $\vec{M}(t=0)=(0,1,0)$
+\end_inset
+
+, but with a phase difference since the same process (rotation around x-axis)
+ is essentially observed but starting from a different point in time.
+ For 
+\begin_inset Formula $\vec{M}(t=0)=(1,0,1)$
+\end_inset
+
+ we see the beat never reaching zero and no full alignment of the z-direction
+ of the spin.
+ The comparison plot matches well with the example plot from the exercise.
+ In conclusion nuclear magnetic resonance can be simulated using the already
+ known tools to us in the form of partial linearization and formally solving
+ differential equations with matrix exponentials.
+ This procedure is a simple and computationally inexpensive algorithm with
+ reasonable accuracy that is acceptable even with big time steps.
+\end_layout
+
+\begin_layout Part*
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+* Introduction: describe briefly the problem you are modeling and simulating
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation model and method: describe briefly the model and simulation
+ method in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation results: show figures (with figure captions!) depicting the
+ simulation results.
+ Give a brief description of the results in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Discussion: Summarize your findings
+\end_layout
+
+\begin_layout Plain Layout
+* Appendix: Include the listing of the program
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Appendix
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import math
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+invT1 = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+invT2 = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+M0 = [0, 1, 0]
+\end_layout
+
+\begin_layout Plain Layout
+
+phi = 0 # in units of pi
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+######
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+f0 = 4
+\end_layout
+
+\begin_layout Plain Layout
+
+f1 = 1/4
+\end_layout
+
+\begin_layout Plain Layout
+
+B0 = 2*math.pi*f0
+\end_layout
+
+\begin_layout Plain Layout
+
+h = 2*math.pi*f1
+\end_layout
+
+\begin_layout Plain Layout
+
+gamma = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+omega0 = B0
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+t_min = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+t_max = 4
+\end_layout
+
+\begin_layout Plain Layout
+
+t_range = t_max - t_min
+\end_layout
+
+\begin_layout Plain Layout
+
+steps = 1000
+\end_layout
+
+\begin_layout Plain Layout
+
+tau = t_range / steps
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def _B(t):
+\end_layout
+
+\begin_layout Plain Layout
+
+    arg = omega0*t + math.pi*phi
+\end_layout
+
+\begin_layout Plain Layout
+
+    return np.asarray([h*math.cos(arg), -h*math.sin(arg), B0])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def _expC():
+\end_layout
+
+\begin_layout Plain Layout
+
+    expT1 = math.exp(-tau/2 * invT1)
+\end_layout
+
+\begin_layout Plain Layout
+
+    expT2 = math.exp(-tau/2 * invT2)
+\end_layout
+
+\begin_layout Plain Layout
+
+    return np.diag([expT2, expT2, expT1])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def _expB(t, B):
+\end_layout
+
+\begin_layout Plain Layout
+
+    omegaSqr = B[0]*B[0] + B[1]*B[1] + B[2]*B[2]
+\end_layout
+
+\begin_layout Plain Layout
+
+    omega = math.sqrt(omegaSqr)
+\end_layout
+
+\begin_layout Plain Layout
+
+    BB = np.outer(B, B)
+\end_layout
+
+\begin_layout Plain Layout
+
+    c = math.cos(omega*t)
+\end_layout
+
+\begin_layout Plain Layout
+
+    s = math.sin(omega*t)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    ret = BB * (1 - c)
+\end_layout
+
+\begin_layout Plain Layout
+
+    ret += np.eye(3) * omega * omega * c
+\end_layout
+
+\begin_layout Plain Layout
+
+    v = omega * s * B
+\end_layout
+
+\begin_layout Plain Layout
+
+    # essentially: M_ij = eps_ijk * v_k (eps being the levi-civita symbol)
+\end_layout
+
+\begin_layout Plain Layout
+
+    ret += np.asarray([[0,v[2],-v[1]], [-v[2],0,v[0]], [v[1],-v[0],0]])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    ret /= omegaSqr
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    return ret
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def expB(t):
+\end_layout
+
+\begin_layout Plain Layout
+
+    C = _expC()
+\end_layout
+
+\begin_layout Plain Layout
+
+    return C @ _expB(tau, _B(t + tau/2)) @ C
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+t = [t_min]
+\end_layout
+
+\begin_layout Plain Layout
+
+M = [np.asarray(M0)]
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(steps):
+\end_layout
+
+\begin_layout Plain Layout
+
+    M.append(np.dot(expB(t[-1]), M[-1]))
+\end_layout
+
+\begin_layout Plain Layout
+
+    t.append(t[-1] + tau)
+\end_layout
+
+\begin_layout Plain Layout
+
+M = np.asarray(M)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, M[:,0], label="$M^x$")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, M[:,1], label="$M^y$")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, M[:,2], label="$M^z$")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.xlabel("t")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylabel("Magnetization")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.xlim(t_min, t_max)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylim(-1,1)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.grid()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig("invT1={},invT2={},M0={}{}{},phi={}.pdf".format(invT1, invT2, M0[0],
+ M0[1], M0[2], phi))
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
