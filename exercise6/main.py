@@ -10,11 +10,12 @@ q = 1
 Delta = 0.1
 L = 1001
 tau = 0.001
-#tau = 0.01
 m = 50000
-#m = 5000
 
+rescale = True
+#rescale = False
 V_barrier = 2
+#V_barrier = 0
 
 def V(x):
     if x >= 50.0 and x <= 50.5:
@@ -65,7 +66,8 @@ plt.grid(True)
 ax = plt.gca()
 ylim = 0.14
 plt.ylim(0, ylim)
-ax.fill_between([50.0, 50.5], 0, ylim, facecolor='grey', alpha=0.5)
+if V_barrier > 0:
+    ax.fill_between([50.0, 50.5], 0, ylim, facecolor='grey', alpha=0.5)
 
 right_index = math.floor(50.5 / Delta + 0.5)
 right_normalization = 0
@@ -86,10 +88,10 @@ for i in range(m+1):
     psi = np.dot(U, psi)
 
 for t, pdpsi in snapshots:
-    pdpsi[right_index:] /= right_normalization
+    if rescale:
+        pdpsi[right_index:] /= right_normalization
     plt.plot(x, pdpsi, label="t={}".format(t))
 
 plt.legend()
-plt.savefig("tdse_pot_barrier.pdf")
-#plt.close()
+plt.savefig("tdse_V={}_rescale_right={}.pdf".format(V_barrier, rescale))
 plt.show()
