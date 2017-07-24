@@ -39,7 +39,7 @@ for l in range(L):
 
 expV = np.zeros((L,L), dtype=complex)
 for l in range(L):
-    expV[l][l] = cmath.exp(-1j * tau * V(l*Delta))
+    expV[l][l] = cmath.exp(-1j * tau * (1/(Delta*Delta) + V(l*Delta)))
 
 c = math.cos(tau / (4*Delta*Delta))
 s = math.sin(tau / (4*Delta*Delta))
