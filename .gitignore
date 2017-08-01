@@ -2,3 +2,4 @@
 *.lyx~
 *.synctex.gz
 *.tex
+**/__pycache__

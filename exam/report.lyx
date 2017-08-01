@@ -1,0 +1,2229 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{braket}
+
+\DeclareMathOperator{\csch}{csch}
+\setlength{\parindent}{0mm}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Computational Physics - Exam Exercise
+\end_layout
+
+\begin_layout Author
+Joel Schumacher, 309231, joel.schumacher@rwth-aachen.de
+\end_layout
+
+\begin_layout Part*
+Quantum harmonic oscillator
+\end_layout
+
+\begin_layout Section*
+Introduction
+\end_layout
+
+\begin_layout Standard
+Analogous to the classical harmonic oscillator the quantum harmonic oscillator
+ describes a system consisting of a particle in a potential of the form:
+\begin_inset Formula 
+\[
+V(x)=\frac{1}{2}m\omega^{2}x^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It gains it's relevance as the first approximation of any potential close
+ to a stable equilibrium point.
+ 
+\end_layout
+
+\begin_layout Standard
+The Hamiltonian in full reads:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{H}=\frac{\hat{p}^{2}}{2m}+\frac{m\omega^{2}\hat{x}^{2}}{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And the Schrödinger equation then follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+i\hbar\frac{\partial}{\partial t}\Phi(x,t)=\left(-\frac{\hbar^{2}}{2m}\frac{\partial^{2}}{\partial x^{2}}+\frac{m\omega^{2}}{2}x^{2}\right)\Phi(x,t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Throughout the rest of this report, is is assumed that: 
+\begin_inset Formula $m=\hbar=1$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+i\frac{\partial}{\partial t}\Phi(x,t)=\left(-\frac{1}{2}\frac{\partial^{2}}{\partial x^{2}}+\frac{\omega^{2}}{2}x^{2}\right)\Phi(x,t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The initial conditions will be an arbitrary guassian wave packet:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Phi(x,t=0)=\left(\pi\sigma^{2}\right)^{-1/4}\exp\left(-\frac{(x-x_{0})^{2}}{2\sigma^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The goal of the simulation is to observe the time evolution of these gaussian
+ wave packets with different parameter sets 
+\begin_inset Formula $\omega,\sigma,x_{0}$
+\end_inset
+
+ by using the product formula approach to solve the time-dependent Schrödinger
+ equation numerically.
+ Specifically the time evolution of the expectation value of the position
+ operator 
+\begin_inset Formula $\braket{\hat{x}}=\braket{\Phi|\hat{x}|\Phi}$
+\end_inset
+
+ and it's variance 
+\begin_inset Formula $(\Delta x)^{2}=\braket{\hat{x}^{2}}-\braket{\hat{x}}^{2}$
+\end_inset
+
+ are of interest.
+\end_layout
+
+\begin_layout Section*
+Analytical considerations
+\end_layout
+
+\begin_layout Standard
+First a special set of states, the coherent states of the quantum harmonic
+ oscillator, is considered: 
+\begin_inset Formula 
+\[
+\ket{\alpha}=e^{-\frac{\left|\alpha\right|^{2}}{2}}\sum_{n=0}^{\infty}\frac{\alpha^{n}}{\sqrt{n\text{!}}}\ket{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These states, as will be obvious later, correspond to 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+, 
+\begin_inset Formula $x_{0}\neq0$
+\end_inset
+
+, ergo represent displaced gaussians with a width equal to the width of
+ the ground state.
+\end_layout
+
+\begin_layout Standard
+Among other ways the coherent states can be defined as the eigenstates of
+ the annihilation operator (the 
+\begin_inset Quotes eld
+\end_inset
+
+down
+\begin_inset Quotes erd
+\end_inset
+
+ ladder operator):
+\begin_inset Formula 
+\begin{align*}
+a\braket{\alpha}= & \sum_{n=0}^{\infty}\frac{\alpha^{n}}{\sqrt{n\text{!}}}a\ket{n}\\
+= & \sum_{n=1}^{\infty}\frac{\alpha^{n}}{\sqrt{n\text{!}}}\sqrt{n}\ket{n-1}\\
+= & \sum_{n=1}^{\infty}\frac{\alpha\sqrt{n}}{\sqrt{n}}\frac{\alpha^{n-1}}{\sqrt{(n-1)\text{!}}}\ket{n-1}\\
+= & \alpha\sum_{n=0}^{\infty}\frac{\alpha^{n}}{\sqrt{n\text{!}}}\ket{n}=\alpha\ket{\alpha}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+using the properties of the ladder operators of the harmonic oscillator:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+a\ket{n} & =\sqrt{n}\ket{n-1}\\
+a\ket{0} & =0\\
+a^{\dagger}\ket{n} & =\sqrt{n+1}\ket{n+1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The position operators can be written using the ladder operators:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{x}=\sqrt{\frac{\hbar}{2m\omega}}\left(a+a^{\dagger}\right)=\sqrt{\frac{1}{2\omega}}\left(a+a^{\dagger}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The mean of the position operator can then be easily calculated:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\braket{\alpha|\hat{x}|\alpha} & =\frac{1}{\sqrt{2\omega}}\braket{\alpha|a+a^{\dagger}|\alpha}\\
+ & =\frac{1}{\sqrt{2\omega}}(\braket{\alpha|a|\alpha}+\braket{\alpha|a^{\dagger}|\alpha})\\
+ & =\frac{1}{\sqrt{2\omega}}(\braket{\alpha|a|\alpha}+\braket{\alpha|a|\alpha}^{*})\\
+ & =\frac{1}{\sqrt{2\omega}}(\alpha+\alpha^{*})=\frac{2}{\sqrt{2\omega}}\Re(\alpha)=\sqrt{\frac{2}{\omega}}\Re(\alpha)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And for the variance it follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\braket{\alpha|\hat{x}^{2}|\alpha}= & \frac{1}{2\omega}\braket{\alpha|a^{2}+aa^{\dagger}+a^{\dagger}a+(a^{\dagger})^{2}|\alpha}\\
+= & \frac{1}{2\omega}(\alpha^{2}+2\alpha\alpha^{*}+1+(\alpha^{*})^{2})\\
+= & \frac{1}{2\omega}((\alpha+\alpha^{*})^{2}+1)\\
+= & \frac{4}{2\omega}(\Re(\alpha)^{2}+1)\\
+(\Delta x)^{2}=\braket{\alpha|\hat{x}^{2}|\alpha}-\braket{\alpha|\hat{x}|\alpha}^{2}= & \frac{2}{\omega}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where it is used that 
+\begin_inset Formula $[a,a^{\dagger}]=1$
+\end_inset
+
+ and 
+\begin_inset Formula $\bra{\alpha}a^{\dagger}=\alpha^{*}\bra{\alpha}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Analogous considerations can be made for 
+\begin_inset Formula $\hat{p}=-i\sqrt{\frac{\omega}{2}}\left(a-a^{\dagger}\right)$
+\end_inset
+
+ to determine 
+\begin_inset Formula $\Delta p$
+\end_inset
+
+, with which it becomes visible that the coherent states are minimum uncertainty
+ states:
+\begin_inset Formula 
+\[
+\Delta x\Delta p=1/2
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which implies that the coherent states have a gaussian shape with equal
+ width.
+\end_layout
+
+\begin_layout Standard
+The time evolution of 
+\begin_inset Formula $\ket{\alpha}$
+\end_inset
+
+ is the last missing piece for this analysis:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+U(t)\ket{\alpha} & =e^{-\frac{\left|\alpha\right|^{2}}{2}}\sum_{n=0}^{\infty}\frac{\alpha^{n}}{\sqrt{n\text{!}}}\ket{n}\\
+ & =e^{-\frac{\left|\alpha\right|^{2}}{2}}\sum_{n=0}^{\infty}\frac{\alpha^{n}}{\sqrt{n\text{!}}}\exp(-iHt)\ket{n}\\
+ & =e^{-\frac{\left|\alpha\right|^{2}}{2}}\sum_{n=0}^{\infty}\frac{\alpha^{n}}{\sqrt{n\text{!}}}\exp(-iE_{n}t)\ket{n}\\
+ & =e^{-\frac{\left|\alpha\right|^{2}}{2}}\sum_{n=0}^{\infty}\frac{\alpha^{n}}{\sqrt{n\text{!}}}e^{-i\omega(n+1/2)t}\ket{n}\\
+ & =e^{-\frac{1}{2}\left|\alpha\right|^{2}}e^{-i\omega t/2}\sum_{n=0}^{\infty}\frac{(\alpha\cdot e^{-i\omega t})^{n}}{\sqrt{n\text{!}}}\ket{n}.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The form of the time evolution corresponds to a coherent state with an oscillati
+ng 
+\begin_inset Formula $\alpha$
+\end_inset
+
+: 
+\begin_inset Formula 
+\[
+\alpha(t)=\alpha(t=0)\cdot e^{-i\omega t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore a coherent state stays a coherent state over time, meaning it
+ stays a gaussian with constant width and an oscillating mean position:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\braket{\hat{x}}=\braket{\hat{x}}(t=0)\cdot\cos\omega t
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which can be identified as the displaced gaussians with width 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+ attempted to be described here.
+\end_layout
+
+\begin_layout Standard
+Another, less insightful way to calculate the mean position is using the
+ Ehrenfest theorem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}\braket{\hat{x}} & =-i\braket{\left[\hat{x},\hat{H}\right]}+\braket{\frac{\partial\hat{x}}{\partial t}}=-i\braket{\left[\hat{x},\frac{1}{2}\hat{p}^{2}\right]}=-\frac{i}{2}\left(\braket{\left[\hat{x},\hat{p}\right]\hat{p}+\hat{p}\left[\hat{x},\hat{p}\right]}\right)=\braket{\hat{p}}\\
+\frac{d}{dt}\braket{\hat{p}} & =-i\braket{\left[\hat{p},\hat{H}\right]}+\braket{\frac{\partial\hat{p}}{\partial t}}=-\omega^{2}\braket{\hat{x}}\\
+\Rightarrow\braket{\hat{x}} & =\braket{\hat{x}}(t=0)\cdot\cos\omega t
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For examining the variance a different method has to be employed.
+ The fundamental solution of the quantum harmonic oscillator is the Mehler
+ kernel:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+K(x,y;t)=\frac{1}{\sqrt{2\pi\sinh(2t)}}\exp\Bigl(-\coth(2t)(x^{2}+y^{2})/2+\csch(2t)xy\Bigr)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with which the general solution of the Schrödinger equation can be calculated
+ by convolution:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Phi(x,t)=\int dyK(x,y;t)\Phi(y,t=0)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The result of this calculation with 
+\begin_inset Formula $\Phi(x,t=0)$
+\end_inset
+
+ with 
+\begin_inset Formula $x_{0}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ arbitrary is taken from 
+\begin_inset Quotes eld
+\end_inset
+
+Visual Quantum Mechanics
+\begin_inset Quotes erd
+\end_inset
+
+ by Bernd Thaller (1.
+ Ed, 2000) (adjusted to notation):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\psi(x,t) & =\left(\frac{1}{\pi\sigma^{2}}\right)^{1/4}\left(\cos\omega t+i\frac{1}{\sigma^{2}}\sin\omega t\right)^{-1/2}\exp\left(-s(t)\frac{x^{2}}{2}\right)\\
+s(t) & =\frac{\frac{1}{\sigma^{2}}\cos\omega t+i\sin\omega t}{\cos\omega t+i\frac{1}{\sigma^{2}}\sin\omega t}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which describes a gaussian with an oscillating standard deviation.
+\end_layout
+
+\begin_layout Standard
+The mean and variance of the position then follow:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\braket{x}=\braket{\psi|x|\psi} & =\int_{-\infty}^{\infty}dx\psi*x\psi\\
+ & =\left(\frac{1}{\pi\sigma^{2}}\right)^{1/2}\frac{1}{\sqrt{\cos\omega t+i\frac{1}{\sigma^{2}}\sin\omega t}\cdot\sqrt{\cos\omega t+i\frac{1}{\sigma^{2}}\sin\omega t}^{*}}\int_{-\infty}^{\infty}dx\exp\left(-s(t)^{*}\frac{x^{2}}{2}\right)x\exp\left(-s(t)\frac{x^{2}}{2}\right)\\
+ & =\left(\frac{1}{\pi\sigma^{2}}\right)^{1/2}\frac{1}{\sqrt{\cos\omega t+i\frac{1}{\sigma^{2}}\sin\omega t}\cdot\sqrt{\cos\omega t-i\frac{1}{\sigma^{2}}\sin\omega t}}\int_{-\infty}^{\infty}dx\exp\left(-\Re(s(t))x^{2}\right)x=0
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\braket{x^{2}}=\braket{\psi|x^{2}|\psi} & =\int_{-\infty}^{\infty}dx\psi^{*}x^{2}\psi\\
+ & =\left(\frac{1}{\pi\sigma^{2}}\right)^{1/2}\frac{1}{\sqrt{\cos^{2}\omega t+\frac{1}{\sigma^{4}}\sin^{2}\omega t}}\int_{-\infty}^{\infty}dx\exp\left(-\Re(s(t))x^{2}\right)x^{2}\\
+ & =\left(\frac{1}{\pi\sigma^{2}}\right)^{1/2}\frac{1}{\sqrt{\cos^{2}\omega t+\frac{1}{\sigma^{4}}\sin^{2}\omega t}}\frac{\sqrt{\pi}}{2\Re(s(t)){}^{3/2}}\\
+ & =\frac{\sqrt{\pi}}{2}\left(\frac{1}{\pi\sigma^{2}}\right)^{1/2}\frac{1}{\sqrt{\cos^{2}\omega t+\frac{1}{\sigma^{4}}\sin^{2}\omega t}}\left(\cos^{2}\omega t+\frac{1}{\sigma^{4}}\sin^{2}\omega t\right)^{3/2}\sigma^{3}\\
+ & =\frac{\sigma^{2}}{2}\left(\cos^{2}\omega t+\frac{1}{\sigma^{4}}\sin^{2}\omega t\right)\\
+ & =\frac{\sigma^{2}}{2}\frac{1}{2}\left(1+\cos(2\omega t)+\frac{1}{\sigma^{4}}-\frac{1}{\sigma^{4}}\cos(2\omega t)\right)\\
+ & =\frac{\sigma^{2}}{4}\left(1+\frac{1}{\sigma^{4}}+\cos(2\omega t)\left(1-\frac{1}{\sigma^{4}}\right)\right)\\
+\Rightarrow(\Delta x)^{2} & =\frac{\sigma^{2}}{4}\left(1+\frac{1}{\sigma^{4}}+\cos(2\omega t)\left(1-\frac{1}{\sigma^{4}}\right)\right)\\
+ & =\left(\frac{\sigma^{2}}{4}+\frac{1}{4\sigma^{2}}\right)+\cos(2\omega t)\left(\frac{\sigma^{2}}{4}-\frac{1}{4\sigma^{2}}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+using:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\Re(s(t)) & =\Re\left(\frac{\frac{1}{\sigma^{2}}\cos\omega t+i\sin\omega t}{\cos\omega t+i\frac{1}{\sigma^{2}}\sin\omega t}\cdot\frac{\cos\omega t-i\frac{1}{\sigma^{2}}\sin\omega t}{\cos\omega t-i\frac{1}{\sigma^{2}}\sin\omega t}\right)\\
+ & =\frac{\frac{1}{\sigma^{2}}\cos^{2}\omega t+\frac{1}{\sigma^{2}}\sin^{2}\omega t}{\cos^{2}\omega t+\frac{1}{\sigma^{4}}\sin^{2}\omega t}=\frac{\frac{1}{\sigma^{2}}}{\cos^{2}\omega t+\frac{1}{\sigma^{4}}\sin^{2}\omega t}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Simulation method
+\end_layout
+
+\begin_layout Standard
+The simulation method is identical to the method used and outlines in exercise
+ 6, though parameters have been modified.
+ For reference the model is explained once more in the appendix 
+\begin_inset CommandInset ref
+LatexCommand vpageref
+reference "sec:Simulation-model"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+Simulation results
+\end_layout
+
+\begin_layout Standard
+Plots of simulation runs with different parameter tuples 
+\begin_inset Formula $\omega,\sigma,x_{0}$
+\end_inset
+
+ can be found in the figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:sim_1_1_0"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:sim_1_1_1"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:sim_1_2_0"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:sim_2_1_1"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:sim_2_2_2"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align right
+\begin_inset Graphics
+	filename Omega=1, sigma=1, x0=0-probdist.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Probability distribution of the wave function at different times 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Omega=1, sigma=1, x0=0-pos.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mean (blue) and variance (green) of the position operator over time.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulation results for 
+\begin_inset Formula $\omega=1$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+, 
+\begin_inset Formula $x_{0}=0$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:sim_1_1_0"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align right
+\begin_inset Graphics
+	filename Omega=1, sigma=1, x0=1-probdist.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Probability distribution of the wave function at different times 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Omega=1, sigma=1, x0=1-pos.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mean (blue) and variance (green) of the position operator over time.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulation results for 
+\begin_inset Formula $\omega=1$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+, 
+\begin_inset Formula $x_{0}=1$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:sim_1_1_1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align right
+\begin_inset Graphics
+	filename Omega=1, sigma=2, x0=0-probdist.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Probability distribution of the wave function at different times 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Omega=1, sigma=2, x0=0-pos.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mean (blue) and variance (green) of the position operator over time.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulation results for 
+\begin_inset Formula $\omega=1$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma=2$
+\end_inset
+
+, 
+\begin_inset Formula $x_{0}=0$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:sim_1_2_0"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align right
+\begin_inset Graphics
+	filename Omega=2, sigma=1, x0=1-probdist.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Probability distribution of the wave function at different times 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Omega=2, sigma=1, x0=1-pos.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mean (blue) and variance (green) of the position operator over time.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulation results for 
+\begin_inset Formula $\omega=2$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+, 
+\begin_inset Formula $x_{0}=1$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:sim_2_1_1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align right
+\begin_inset Graphics
+	filename Omega=2, sigma=2, x0=2-probdist.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Probability distribution of the wave function at different times 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Omega=2, sigma=2, x0=2-pos.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mean (blue) and variance (green) of the position operator over time.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulation results for 
+\begin_inset Formula $\omega=2$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma=2$
+\end_inset
+
+, 
+\begin_inset Formula $x_{0}=2$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:sim_2_2_2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Discussion
+\end_layout
+
+\begin_layout Standard
+The simulation gives plausible results that match our analytical prediction.
+ The system with 
+\begin_inset Formula $\omega=1$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+, 
+\begin_inset Formula $x_{0}=0$
+\end_inset
+
+ is stationary, as expected, since it is the ground state 
+\begin_inset Formula $\ket{0}$
+\end_inset
+
+ of the quantum harmonic oscillator.
+ It is also a coherent state with 
+\begin_inset Formula $\alpha=0$
+\end_inset
+
+, which implies that there is no oscillation too, since 
+\begin_inset Formula $\alpha=0\Rightarrow\Re(\alpha)=0$
+\end_inset
+
+.
+ A sinusodial oscillation in the mean position with frequency 
+\begin_inset Formula $\omega/\pi$
+\end_inset
+
+ can be observed for 
+\begin_inset Formula $x_{0}\neq0$
+\end_inset
+
+.
+ With 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+ these states correspond to coherent states, which are minimally uncertain.
+ This makes them the 
+\begin_inset Quotes eld
+\end_inset
+
+most classical
+\begin_inset Quotes erd
+\end_inset
+
+ state that can be constructed, so it is plausible to observe the classical
+ limit of a particle oscillating in the potential unchanged here, which
+ is the case.
+ This also motivates the coherent states sometimes being called 
+\begin_inset Quotes eld
+\end_inset
+
+quasi-classical
+\begin_inset Quotes erd
+\end_inset
+
+ states.
+\end_layout
+
+\begin_layout Standard
+An also sinusodial oscillation of the width of the gaussian can be observed
+ with the expected frequency 
+\begin_inset Formula $2\omega/\pi$
+\end_inset
+
+.
+ For 
+\begin_inset Formula $\omega=1$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma=2$
+\end_inset
+
+, 
+\begin_inset Formula $x_{0}=1$
+\end_inset
+
+ the functional dependence of that oscillation matches the prediction exactly.
+\end_layout
+
+\begin_layout Standard
+The frequencies of the oscillations of both variance and mean position holds
+ true even for the cases of both 
+\begin_inset Formula $x_{0}\neq0$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma\neq1$
+\end_inset
+
+, which could not be handled analytically in full.
+\end_layout
+
+\begin_layout Standard
+In conclusion the formula approach was successfully used to simulate the
+ dynamics of the quantum harmonic oscillator.
+ As stated in the previous exercise, the approach is simple and effective,
+ but can not trivially be extended to higher dimensions and requires a fair
+ amount computational investment to avoid numerical errors, which are easily
+ introduced if the time step is chosen too large.
+\end_layout
+
+\begin_layout Part*
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+* Introduction: describe briefly the problem you are modeling and simulating
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation model and method: describe briefly the model and simulation
+ method in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Simulation results: show figures (with figure captions!) depicting the
+ simulation results.
+ Give a brief description of the results in text format
+\end_layout
+
+\begin_layout Plain Layout
+* Discussion: Summarize your findings
+\end_layout
+
+\begin_layout Plain Layout
+* Appendix: Include the listing of the program
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Appendix
+\end_layout
+
+\begin_layout Section*
+Simulation model
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Simulation-model"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Using finite differences the spatial derivative in the Schrödinger equation
+ becomes:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial^{2}}{\partial x^{2}}\Psi(x,t)=\frac{\Psi(x+\Delta,t)-2\Psi(x,t)+\Psi(x-\Delta,t)}{\Delta^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 
+\begin_inset Formula $\Delta=0.025$
+\end_inset
+
+ being the spacing of our simulation grid.
+\end_layout
+
+\begin_layout Standard
+The Schrödinger equation in one dimension then becomes
+\begin_inset Formula 
+\begin{align*}
+i\frac{\partial}{\partial t}\Psi(x,t) & =-\frac{\Psi(x+\Delta,t)-2\Psi(x,t)+\Psi(x-\Delta,t)}{2\Delta^{2}}+V(x)\Psi(x,t)\\
+ & =\frac{1}{\Delta^{2}}\left(-\frac{1}{2}\Psi(x+\Delta,t)-\frac{1}{2}\Psi(x-\Delta,t)+\left(1+\Delta^{2}V(x)\right)\Psi(x,t)\right).\\
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our discretized Hamiltonian can then be read as:
+\begin_inset Formula 
+\[
+i\frac{\partial}{\partial t}\begin{pmatrix}\Psi_{1}(t)\\
+\Psi_{2}(t)\\
+\Psi_{3}(t)\\
+\vdots\\
+\vdots\\
+\Psi_{L}(t)
+\end{pmatrix}=\underbrace{\frac{1}{\Delta^{2}}\begin{pmatrix}1+\Delta^{2}V_{1} & -1/2 & 0 &  &  & 0\\
+-1/2 & 1+\Delta^{2}V_{2} & -1/2 & 0 &  & 0\\
+0 & -1/2 & 1+\Delta^{2}V_{3}\\
+ &  &  & \ddots &  & 0\\
+ &  &  &  &  & -1/2\\
+0 &  &  & 0 & -1/2 & 1+\Delta^{2}V_{L}
+\end{pmatrix}}_{H}\begin{pmatrix}\Psi_{1}(t)\\
+\Psi_{2}(t)\\
+\Psi_{3}(t)\\
+\vdots\\
+\vdots\\
+\Psi_{L}(t)
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 
+\begin_inset Formula $V_{i}=V(i\Delta)$
+\end_inset
+
+, 
+\begin_inset Formula $\Psi_{i}(t)=\Psi(x=i\Delta,t)$
+\end_inset
+
+ and 
+\begin_inset Formula $L=1201$
+\end_inset
+
+ being the size of our simulation grid (in number of grid points).
+\end_layout
+
+\begin_layout Standard
+The Hamiltonian can then be decomposed into a sum:
+\begin_inset Formula 
+\begin{align*}
+H & =V+K_{1}+K_{2}=\frac{1}{\Delta^{2}}\begin{pmatrix}1+\Delta^{2}V_{1} & 0 & 0 &  &  & 0\\
+0 & 1+\Delta^{2}V_{2} & 0 & 0 &  & 0\\
+0 & 0 & 1+\Delta^{2}V_{3}\\
+ &  &  & \ddots &  & 0\\
+ &  &  &  & 1+\Delta^{2}V_{L-1} & \text{0}\\
+0 &  &  & 0 & 0 & 1+\Delta^{2}V_{L}
+\end{pmatrix}\\
+ & +\frac{1}{\Delta^{2}}\begin{pmatrix}0 & -1/2 & 0 &  &  & 0\\
+-1/2 & 0 & 0\\
+0 & 0 & 0\\
+ &  &  & \ddots & -1/2 & 0\\
+ &  &  & -1/2 & 0 & 0\\
+0 &  &  & 0 & 0 & 0
+\end{pmatrix}+\frac{1}{\Delta^{2}}\begin{pmatrix}0 & 0 & 0 &  &  & 0\\
+0 & 0 & -1/2\\
+0 & -1/2 & 0\\
+ &  &  & \ddots &  & 0\\
+ &  &  &  & 0 & -1/2\\
+0 &  &  & 0 & -1/2 & 0
+\end{pmatrix}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The time evolution operator can then be written as:
+\begin_inset Formula 
+\[
+U(\tau)=e^{-i\tau H}\approx e^{-i\tau K_{1}/2}e^{-i\tau K_{2}/2}e^{-i\tau V}e^{-i\tau K_{2}/2}e^{-i\tau K_{1}/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\tau=0.00025$
+\end_inset
+
+ is the time step of our simulation.
+\end_layout
+
+\begin_layout Standard
+The full expressions are the following:
+\begin_inset Formula 
+\begin{align*}
+e^{-i\tau K_{1}/2} & =\begin{pmatrix}c & is &  &  &  &  &  & \dots & 0\\
+is & c & 0 &  &  &  &  &  & \vdots\\
+ & 0 & c & is\\
+ &  & is & c & 0\\
+ &  &  & 0 & c & is\\
+ &  &  &  & is & c & 0\\
+ &  &  &  &  & 0 & \ddots & is\\
+\vdots &  &  &  &  &  & is & \ddots & 0\\
+\text{0} & \dots &  &  &  &  &  & \text{0} & 1
+\end{pmatrix}\\
+e^{-i\tau K_{2}/2} & =\begin{pmatrix}1 & 0 &  &  &  &  &  & \dots & 0\\
+0 & c & is &  &  &  &  &  & \vdots\\
+ & is & c & 0\\
+ &  & 0 & c & is\\
+ &  &  & is & c & 0\\
+ &  &  &  & 0 & c & is\\
+ &  &  &  &  & is & \ddots & 0\\
+\vdots &  &  &  &  &  & 0 & \ddots & is\\
+\text{0} & \dots &  &  &  &  &  & is & c
+\end{pmatrix}\\
+e^{-i\tau V} & =\frac{1}{\Delta^{2}}\begin{pmatrix}1+\Delta^{2}V_{1} & 0 & 0 &  &  & 0\\
+0 & 1+\Delta^{2}V_{2} & 0 & 0 &  & 0\\
+0 & 0 & 1+\Delta^{2}V_{3}\\
+ &  &  & \ddots &  & 0\\
+ &  &  &  & 1+\Delta^{2}V_{L-1} & \text{0}\\
+0 &  &  & 0 & 0 & 1+\Delta^{2}V_{L}
+\end{pmatrix}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $c=\cos\left(\tau/(4\Delta^{2})\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $s=\sin\left(\tau/(4\Delta^{2})\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In each timestep a set of complex values for each grid point is then updated
+ using the time evolution operator.
+\end_layout
+
+\begin_layout Section*
+Shared constants (conf.py)
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Delta = 0.025
+\end_layout
+
+\begin_layout Plain Layout
+
+tau = 0.00025
+\end_layout
+
+\begin_layout Plain Layout
+
+m = 40000
+\end_layout
+
+\begin_layout Plain Layout
+
+xMin, xMax = -15, 15
+\end_layout
+
+\begin_layout Plain Layout
+
+xRange = xMax - xMin
+\end_layout
+
+\begin_layout Plain Layout
+
+L = (xRange / Delta) + 1
+\end_layout
+
+\begin_layout Plain Layout
+
+assert abs(L - int(L)) < 1e-8
+\end_layout
+
+\begin_layout Plain Layout
+
+L = int(L)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Simulation script
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import math
+\end_layout
+
+\begin_layout Plain Layout
+
+import cmath
+\end_layout
+
+\begin_layout Plain Layout
+
+import sys
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+from conf import *
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def sim(Omega, sigma, x0):
+\end_layout
+
+\begin_layout Plain Layout
+
+    def V(x):
+\end_layout
+
+\begin_layout Plain Layout
+
+        return Omega*Omega / 2 * x*x
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    def psi_t0(x):
+\end_layout
+
+\begin_layout Plain Layout
+
+        ret = math.pow(math.pi * sigma*sigma, -0.25)
+\end_layout
+
+\begin_layout Plain Layout
+
+        ret *= math.exp(-(x-x0)*(x-x0)/(2*sigma*sigma))
+\end_layout
+
+\begin_layout Plain Layout
+
+        return ret
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    psi = np.zeros(L, dtype=complex)
+\end_layout
+
+\begin_layout Plain Layout
+
+    for l in range(L):
+\end_layout
+
+\begin_layout Plain Layout
+
+        psi[l] = psi_t0(xMin + l*Delta)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    expV = np.zeros((L,L), dtype=complex)
+\end_layout
+
+\begin_layout Plain Layout
+
+    for l in range(L):
+\end_layout
+
+\begin_layout Plain Layout
+
+        expV[l][l] = cmath.exp(-1j * tau * (1/(Delta*Delta) + V(xMin + l*Delta)))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    c = math.cos(tau / (4*Delta*Delta))
+\end_layout
+
+\begin_layout Plain Layout
+
+    s = math.sin(tau / (4*Delta*Delta))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    expK1 = np.eye(L, dtype=complex) * c
+\end_layout
+
+\begin_layout Plain Layout
+
+    expK1[L-1][L-1] = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+    expK2 = np.eye(L, dtype=complex) * c
+\end_layout
+
+\begin_layout Plain Layout
+
+    expK2[1][1] = 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    for l in range(L):
+\end_layout
+
+\begin_layout Plain Layout
+
+        if l+1 < L:
+\end_layout
+
+\begin_layout Plain Layout
+
+            if l % 2 == 0:
+\end_layout
+
+\begin_layout Plain Layout
+
+                expK1[l+1][l] = expK1[l][l+1] = 1j * s
+\end_layout
+
+\begin_layout Plain Layout
+
+            else:
+\end_layout
+
+\begin_layout Plain Layout
+
+                expK2[l+1][l] = expK2[l][l+1] = 1j * s
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    U = expK1 @ expK2 @ expV @ expK2 @ expK1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    out = np.zeros((m+1, L), dtype=complex)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    for i in range(m+1):
+\end_layout
+
+\begin_layout Plain Layout
+
+        if math.floor(i/m*100) != math.floor((i-1)/m*100):
+\end_layout
+
+\begin_layout Plain Layout
+
+            print(math.floor(i/m*100), "%")
+\end_layout
+
+\begin_layout Plain Layout
+
+        t = i * tau
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        psi = np.dot(U, psi)
+\end_layout
+
+\begin_layout Plain Layout
+
+        out[i] = psi
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    return out
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# on sheet: (1,1,0), (1,1,1), (1,2,0), (2,1,1), (2,2,2)
+\end_layout
+
+\begin_layout Plain Layout
+
+Omega, sigma, x0 = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
+\end_layout
+
+\begin_layout Plain Layout
+
+set_name = "Omega={}, sigma={}, x0={}".format(Omega, sigma, x0)
+\end_layout
+
+\begin_layout Plain Layout
+
+print(set_name)
+\end_layout
+
+\begin_layout Plain Layout
+
+data = sim(Omega, sigma, x0)
+\end_layout
+
+\begin_layout Plain Layout
+
+np.save(set_name, data)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Plot script
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},breaklines=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import os
+\end_layout
+
+\begin_layout Plain Layout
+
+import sys
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+from conf import *
+\end_layout
+
+\begin_layout Plain Layout
+
+x = np.arange(L) * Delta + xMin
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def pd(psi):
+\end_layout
+
+\begin_layout Plain Layout
+
+    v = np.absolute(psi)
+\end_layout
+
+\begin_layout Plain Layout
+
+    return v*v
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def expect(psi, f):
+\end_layout
+
+\begin_layout Plain Layout
+
+    assert f.shape == psi.shape
+\end_layout
+
+\begin_layout Plain Layout
+
+    return np.dot(f, pd(psi)) * Delta
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def mean_pos(psi):
+\end_layout
+
+\begin_layout Plain Layout
+
+    return expect(psi, x)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def var_pos(psi):
+\end_layout
+
+\begin_layout Plain Layout
+
+    mp = mean_pos(psi)
+\end_layout
+
+\begin_layout Plain Layout
+
+    return expect(psi, x*x) - mp*mp
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+data = np.load(sys.argv[1])
+\end_layout
+
+\begin_layout Plain Layout
+
+name = sys.argv[1][:-4]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+t = np.arange(m+1) * tau
+\end_layout
+
+\begin_layout Plain Layout
+
+mean = np.zeros(m+1)
+\end_layout
+
+\begin_layout Plain Layout
+
+var = np.zeros(m+1)
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(m+1):
+\end_layout
+
+\begin_layout Plain Layout
+
+    psi = data[i]
+\end_layout
+
+\begin_layout Plain Layout
+
+    # snapshots at t=0,2,4,6,8,10
+\end_layout
+
+\begin_layout Plain Layout
+
+    # => i = 0, 8000, 16000, ..., 40000
+\end_layout
+
+\begin_layout Plain Layout
+
+    if i % 8000 == 0:
+\end_layout
+
+\begin_layout Plain Layout
+
+         plt.plot(x, pd(psi), label="t={}".format(i * tau))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    mean[i] = mean_pos(psi)
+\end_layout
+
+\begin_layout Plain Layout
+
+    var[i] = var_pos(psi)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.xlabel("x")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylabel("P(x,t)")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.grid(True)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig(name + "-probdist.pdf")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.close()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.xlabel("t")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.ylabel("Average")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.grid(True)
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, mean, label="$<x(t)>$")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(t, var, label="$<x(t)^2> - <x(t)>^2$")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.legend()
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.savefig(name + "-pos.pdf")
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.show()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
